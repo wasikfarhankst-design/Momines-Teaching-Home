@@ -1,203 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Beautiful Background Colors</title>
-<style>
-  body {
-    background-color: rgb(240, 240, 240);
-    font-family: sans-serif;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-  }
-  .section, .expanded-section { /* Apply common styling */
-    padding: 30px;
-    margin: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer; /* Indicate that it's clickable */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
-  }
-  .section:hover, .expanded-section:hover { /* Apply common hover */
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Momin's Teaching Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
 
-  /* Original Section Colors */
-  .red { background-color: rgb(255, 99, 71); color: white; }
-  .dark-orange { background-color: rgb(255, 140, 0); color: white; }
-  .light-orange { background-color: rgb(255, 165, 78); color: white; }
-  .yellow { background-color: rgb(255, 218, 102); color: white; }
-  .light-green { background-color: rgb(144, 238, 144); color: white; }
-  .sky-blue { background-color: rgb(135, 206, 235); color: white; }
-  .dark-blue { background-color: rgb(0, 0, 139); color: white; }
+        .login-container {
+            background-color: #ffffff;
+            padding: 40px 50px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 350px;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-  /* Expanded Section Specifics */
-  .expanded-section {
-    display: none; /* Hidden by default */
-    /* Removed specific background/padding to inherit from .section styling */
-    /* Add back if you want a distinct background for expanded content */
-  }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-  .expanded-section h3 {
-    margin-top: 0;
-    color: white; /* Match text color of parent section */
-    margin-bottom: 15px; /* Spacing below title */
-  }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
 
-  .fuel-type-box {
-    display: inline-block; /* Arrange boxes side-by-side */
-    padding: 15px 20px; /* Consistent padding */
-    margin: 8px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
-  }
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
 
-  .fuel-type-box:hover {
-    transform: scale(1.05); /* Slightly enlarge on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
 
-  /* Specific color schemes for the sub-boxes to match parent sections */
-  /* Using 'rgba' for background with alpha for transparency */
-  .ethanol-sub .fuel-type-box { background-color: rgba(255, 99, 71, 0.8); color: white; border: 1px solid rgb(255, 99, 71); }
-  .petrol-sub .fuel-type-box { background-color: rgba(255, 140, 0, 0.8); color: white; border: 1px solid rgb(255, 140, 0); }
-  .octen-sub .fuel-type-box { background-color: rgba(255, 165, 78, 0.8); color: white; border: 1px solid rgb(255, 165, 78); }
-  .diesel-sub .fuel-type-box { background-color: rgba(255, 218, 102, 0.8); color: #333; border: 1px solid rgb(255, 218, 102); }
-  .kerosin-sub .fuel-type-box { background-color: rgba(144, 238, 144, 0.8); color: white; border: 1px solid rgb(144, 238, 144); }
-  .gasolin-sub .fuel-type-box { background-color: rgba(135, 206, 235, 0.8); color: white; border: 1px solid rgb(135, 206, 235); }
-  .biogas-sub .fuel-type-box { background-color: rgba(0, 0, 139, 0.8); color: white; border: 1px solid rgb(0, 0, 139); }
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 20px); /* Adjust for padding */
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
 
-  /* Make sure the expanded section's internal content matches the original section's look */
-  .ethanol-sub { background-color: rgb(255, 99, 71); color: white; }
-  .petrol-sub { background-color: rgb(255, 140, 0); color: white; }
-  .octen-sub { background-color: rgb(255, 165, 78); color: white; }
-  .diesel-sub { background-color: rgb(255, 218, 102); color: #333; } /* Diesel text color needs to be dark for contrast */
-  .kerosin-sub { background-color: rgb(144, 238, 144); color: white; }
-  .gasolin-sub { background-color: rgb(135, 206, 235); color: white; }
-  .biogas-sub { background-color: rgb(0, 0, 139); color: white; }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
 
-</style>
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .login-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-
-  <h1>Please choose a fuel type what you want:</h1>
-
-  <div class="section red" data-target="ethanol-details">
-    <h2>Ethanol</h2>
-    <p>For classic car</p>
-  </div>
-
-  <div class="section dark-orange" data-target="petrol-details">
-    <h2>Petrol</h2>
-    <p>For standard</p>
-  </div>
-
-  <div class="section light-orange" data-target="octen-details">
-    <h2>Octen</h2>
-    <p>For better mileage car.</p>
-  </div>
-
-  <div class="section yellow" data-target="diesel-details">
-    <h2>Diesel</h2>
-    <p>For loaded car and truck</p>
-  </div>
-
-  <div class="section light-green" data-target="kerosin-details">
-    <h2>Kerosin</h2>
-    <p>For old loaded truck and car</p>
-  </div>
-
-  <div class="section sky-blue" data-target="gasolin-details">
-    <h2>Gasolin</h2>
-    <p>For cheap economy</p>
-  </div>
-
-  <div class="section dark-blue" data-target="biogas-details">
-    <h2>Bio gas</h2>
-    <p>For help environment</p>
-  </div>
-
-  <!-- Expanded Sections (Initially hidden) -->
-  <div id="ethanol-details" class="expanded-section ethanol-sub">
-    <h3>Ethanol Fuel Variants</h3>
-    <div class="fuel-type-box">E5</div>
-    <div class="fuel-type-box">E10</div>
-    <div class="fuel-type-box">E20</div>
-    <div class="fuel-type-box">E25</div>
-    <div class="fuel-type-box">E50</div>
-    <div class="fuel-type-box">E75</div>
-    <div class="fuel-type-box">E100</div>
-  </div>
-
-  <div id="petrol-details" class="expanded-section petrol-sub">
-    <h3>Petrol Fuel Variants</h3>
-    <div class="fuel-type-box">Unleaded 95</div>
-    <div class="fuel-type-box">Unleaded 98</div>
-    <div class="fuel-type-box">Leaded</div>
-  </div>
-
-  <div id="octen-details" class="expanded-section octen-sub">
-    <h3>Octen Fuel Variants</h3>
-    <div class="fuel-type-box">High Octane Petrol</div>
-    <div class="fuel-type-box">Racing Fuel</div>
-  </div>
-
-  <div id="diesel-details" class="expanded-section diesel-sub">
-    <h3>Diesel Fuel Variants</h3>
-    <div class="fuel-type-box">Standard Diesel</div>
-    <div class="fuel-type-box">Biodiesel</div>
-    <div class="fuel-type-box">Ultra-Low Sulfur Diesel (ULSD)</div>
-  </div>
-
-  <div id="kerosin-details" class="expanded-section kerosin-sub">
-    <h3>Kerosin Fuel Variants</h3>
-    <div class="fuel-type-box">Kerosene (Paraffin)</div>
-    <div class="fuel-type-box">Jet Fuel (similar)</div>
-  </div>
-
-  <div id="gasolin-details" class="expanded-section gasolin-sub">
-    <h3>Gasolin Fuel Variants</h3>
-    <div class="fuel-type-box">Regular Unleaded</div>
-    <div class="fuel-type-box">Premium Unleaded</div>
-  </div>
-
-  <div id="biogas-details" class="expanded-section biogas-sub">
-    <h3>Bio gas Fuel Variants</h3>
-    <div class="fuel-type-box">Biomethane</div>
-    <div class="fuel-type-box">Compressed Biogas (CBG)</div>
-  </div>
-
-  <script>
-    const allSections = document.querySelectorAll('.section');
-    const allExpandedSections = document.querySelectorAll('.expanded-section');
-
-    allSections.forEach(section => {
-      section.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-target');
-        const targetSection = document.getElementById(targetId);
-
-        // Determine if the target section is currently visible
-        // We check against 'block' because that's what we set it to.
-        const isTargetVisible = targetSection && targetSection.style.display === 'block';
-
-        // Hide all expanded sections first
-        allExpandedSections.forEach(expSection => {
-          expSection.style.display = 'none';
-        });
-
-        // If the clicked section was NOT already visible, show its target.
-        // This ensures that clicking a closed section opens it, and clicking an
-        // open section closes it (because it was hidden by the previous loop).
-        if (targetSection && !isTargetVisible) {
-          targetSection.style.display = 'block';
-        }
-      });
-    });
-  </script>
-
+    <div class="login-container">
+        <h1>Momin's Teaching Home</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+    </div>
 </body>
 </html>
