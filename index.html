@@ -37,7 +37,9 @@
             color: var(--text-color-light);
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease;
-            overflow: hidden;
+            /* overflow: hidden;  Removed to allow scrolling */
+            height: 100vh; /* Essential for fixed sidebar and content height */
+            display: flex; /* Use flexbox to manage sidebar and main content */
         }
 
         body.dark-mode {
@@ -47,9 +49,9 @@
 
         /* --- Sidebar Menu --- */
         .sidebar {
-            height: 100vh;
-            width: 0;
-            position: fixed;
+            height: 100vh; /* Full viewport height */
+            width: 0; /* Initially closed */
+            position: fixed; /* Fixed position to stay visible */
             z-index: 1000;
             top: 0;
             left: 0;
@@ -75,9 +77,9 @@
             cursor: pointer;
             z-index: 1001;
             color: var(--primary-color);
-            transition: color 0.3s ease, opacity 0.3s ease;
-            opacity: 0; /* Hidden by default */
-            display: none; /* Hidden by default */
+            transition: color 0.3s ease, opacity 0.3s ease, left 0.5s ease; /* Added left transition */
+            opacity: 0;
+            display: none;
         }
         .sidebar-toggle-icon.visible {
             opacity: 1;
@@ -151,16 +153,26 @@
 
         /* --- Main Content Area --- */
         .main-content {
-            margin-left: 0;
+            flex-grow: 1; /* Allow main content to take available space */
+            overflow-y: auto; /* Enable scrolling ONLY for the main content */
             transition: margin-left 0.5s;
             padding: 20px;
-            width: 100%;
             box-sizing: border-box;
-            position: relative; /* Needed for absolute positioning of forms */
+            position: relative; /* For centering content */
         }
 
         .sidebar-open .main-content {
-            margin-left: 250px;
+            margin-left: 250px; /* Pushes content when sidebar is open */
+        }
+
+        /* Centering content within the main area */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 40px); /* Adjust height for padding */
+            padding: 0px 20px; /* Matches main-content padding */
         }
 
         /* --- Login Section --- */
@@ -172,28 +184,18 @@
             text-align: center;
             width: 350px;
             animation: fadeIn 0.5s ease-in-out;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            margin: 0 auto; /* Center horizontally within content-wrapper */
         }
         body.dark-mode .login-container {
             background-color: var(--card-background-dark);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translate(-50%, -40px); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .login-container h1 {
-            color: var(--text-color-light);
-            margin-bottom: 30px;
-            font-size: 28px;
-            font-weight: 600;
-        }
-        body.dark-mode .login-container h1 {
-            color: var(--text-color-dark);
-        }
+        .login-container h1 { color: var(--text-color-light); margin-bottom: 30px; font-size: 28px; font-weight: 600; }
+        body.dark-mode .login-container h1 { color: var(--text-color-dark); }
         .login-container .input-group { margin-bottom: 20px; text-align: left; }
         .login-container label { display: block; margin-bottom: 8px; color: #555; font-weight: 500; }
         body.dark-mode .login-container label { color: #ccc; }
@@ -238,22 +240,18 @@
         /* --- Home Page Content --- */
         .home-content {
             display: none;
-            padding: 20px;
-            text-align: center;
-            height: 100vh; /* Make it full viewport height */
-            background-image: var(--home-wallpaper-url); /* Apply wallpaper */
-            background-size: cover; /* Cover the entire area */
-            background-position: center; /* Center the image */
-            background-attachment: fixed; /* Keep wallpaper fixed during scroll */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
-            box-sizing: border-box;
-            position: relative; /* For overlay */
+            height: 100%; /* Take full height of its parent (.content-wrapper) */
+            background-image: var(--home-wallpaper-url);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            z-index: 1; /* Below overlay */
+            text-align: center; /* Center content if flexbox is not used for centering */
+            color: #fff; /* Default text color for wallpaper */
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
 
-        /* Overlay for better text readability on wallpaper */
         .home-content::before {
             content: '';
             position: absolute;
@@ -261,59 +259,53 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.3); /* Adjust opacity for desired darkness */
-            z-index: 1;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2; /* Above background, below content */
+        }
+
+        .home-content .content-wrapper { /* Wrapper for home content */
+            position: relative; /* Above overlay */
+            z-index: 3;
+            padding: 20px; /* Add padding here too */
         }
 
         .home-content h2 {
-            font-size: 48px; /* Larger for wallpaper */
-            color: #fff; /* White text on wallpaper */
+            font-size: 48px;
             margin-bottom: 40px;
             animation: fadeInWelcome 1s ease-in-out;
-            position: relative; /* To be above the overlay */
-            z-index: 2;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5); /* Text shadow for better contrast */
         }
         @keyframes fadeInWelcome {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .home-content p {
             font-size: 20px;
-            color: #eee;
-            position: relative;
-            z-index: 2;
-            text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
         }
-
-        /* Dark mode on home content (mostly for text readability on wallpaper) */
-        body.dark-mode .home-content h2,
-        body.dark-mode .home-content p {
-            color: #fff; /* Keep text light for contrast */
+        body.dark-mode .home-content h2, body.dark-mode .home-content p {
+            color: #fff;
         }
         body.dark-mode .home-content::before {
-             background: rgba(0, 0, 0, 0.5); /* Slightly darker overlay in dark mode */
+             background: rgba(0, 0, 0, 0.5);
         }
 
 
         /* --- My Account Page --- */
         .account-page {
             display: none;
-            padding: 30px;
             background-color: var(--card-background-light);
+            padding: 40px 50px;
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            margin: 20px auto;
-            max-width: 600px;
+            text-align: center;
+            width: 380px; /* Increased width slightly */
             animation: fadeIn 0.5s ease-in-out;
+            margin: 0 auto; /* Center horizontally within content-wrapper */
         }
         body.dark-mode .account-page {
             background-color: var(--card-background-dark);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
         .account-page h2 {
-            text-align: center;
             margin-bottom: 30px;
             color: var(--primary-color);
         }
@@ -326,7 +318,7 @@
         body.dark-mode .account-page input {
             border-color: var(--input-border-dark); background-color: var(--input-background-dark); color: var(--text-color-dark);
         }
-        .account-page .button-container { text-align: center; margin-top: 30px; }
+        .account-page .button-container { margin-top: 30px; }
         .account-page button {
             padding: 12px 25px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;
         }
@@ -342,11 +334,8 @@
             text-align: center;
             width: 380px;
             animation: fadeIn 0.5s ease-in-out;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-height: 90vh;
+            margin: 0 auto; /* Center horizontally within content-wrapper */
+            max-height: calc(100vh - 40px); /* Limit height to fit within main-content padding */
             overflow-y: auto;
         }
         body.dark-mode .register-form-container {
@@ -415,105 +404,110 @@
 
     <!-- Main Content Area -->
     <div class="main-content" id="mainContent">
+        <!-- Wrapper for centering content like forms and home page -->
+        <div class="content-wrapper">
 
-        <!-- Login Section -->
-        <div class="login-container" id="loginSection">
-            <h1>Momin's Teaching Home</h1>
-            <form id="loginForm">
-                <div class="input-group">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            <!-- Login Section -->
+            <div class="login-container" id="loginSection">
+                <h1>Momin's Teaching Home</h1>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="login-button">Login</button>
+                </form>
+                <p id="loginErrorMessage" class="hidden">Invalid username or password.</p>
+                <div class="login-theme-toggle">
+                    <label for="loginDarkModeSwitch">Dark Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="loginDarkModeSwitch">
+                        <span class="slider"></span>
+                    </label>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <div class="login-register-toggle">
+                    No account? <span id="showRegisterForm">Register Account now.</span>
                 </div>
-                <button type="submit" class="login-button">Login</button>
-            </form>
-            <p id="loginErrorMessage" class="hidden">Invalid username or password.</p>
-            <div class="login-theme-toggle">
-                <label for="loginDarkModeSwitch">Dark Mode</label>
-                <label class="switch">
-                    <input type="checkbox" id="loginDarkModeSwitch">
-                    <span class="slider"></span>
-                </label>
             </div>
-            <div class="login-register-toggle">
-                No account? <span id="showRegisterForm">Register Account now.</span>
+
+            <!-- Registration Form Section -->
+            <div class="register-form-container" id="registerSection">
+                <h1>Create Your Account</h1>
+                <form id="registrationForm">
+                    <div class="input-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="input-group">
+                        <label for="regUsername">Username:</label>
+                        <input type="text" id="regUsername" name="regUsername" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="regPassword">Password:</label>
+                        <input type="password" id="regPassword" name="regPassword" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <div class="terms">
+                        <input type="checkbox" id="termsCheckbox" name="terms" required>
+                        <label for="termsCheckbox">I accept the <a href="#" id="termsLink">Terms and Policies</a></label>
+                    </div>
+                    <button type="submit" class="login-button">Register</button>
+                </form>
+                <p id="registerErrorMessage" class="hidden" style="color: red; text-align: center; margin-top: 15px;">Error messages will appear here.</p>
+                <div class="login-link">
+                    Already have an account? <span id="showLoginForm">Login here.</span>
+                </div>
             </div>
-        </div>
 
-        <!-- Registration Form Section -->
-        <div class="register-form-container" id="registerSection">
-            <h1>Create Your Account</h1>
-            <form id="registrationForm">
-                <div class="input-group">
-                    <label for="firstName">First Name:</label>
-                    <input type="text" id="firstName" name="firstName" required>
+            <!-- Home Page Content -->
+            <div class="home-content" id="homeSection">
+                <div class="content-wrapper">
+                    <h2>Wellcome to Momin's Teaching Home</h2>
+                    <p>Your gateway to learning and growth.</p>
                 </div>
-                <div class="input-group">
-                    <label for="lastName">Last Name:</label>
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
-                <div class="input-group">
-                    <label for="phone">Phone:</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="input-group">
-                    <label for="regUsername">Username:</label>
-                    <input type="text" id="regUsername" name="regUsername" required>
-                </div>
-                <div class="input-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="input-group">
-                    <label for="regPassword">Password:</label>
-                    <input type="password" id="regPassword" name="regPassword" required>
-                </div>
-                <div class="input-group">
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required>
-                </div>
-                <div class="terms">
-                    <input type="checkbox" id="termsCheckbox" name="terms" required>
-                    <label for="termsCheckbox">I accept the <a href="#" id="termsLink">Terms and Policies</a></label>
-                </div>
-                <button type="submit" class="login-button">Register</button>
-            </form>
-            <p id="registerErrorMessage" class="hidden" style="color: red; text-align: center; margin-top: 15px;">Error messages will appear here.</p>
-            <div class="login-link">
-                Already have an account? <span id="showLoginForm">Login here.</span>
             </div>
-        </div>
 
-        <!-- Home Page Content -->
-        <div class="home-content" id="homeSection">
-            <h2>Wellcome to Momin's Teaching Home</h2>
-            <p>Your gateway to learning and growth.</p>
-        </div>
-
-        <!-- My Account Page -->
-        <div class="account-page" id="myAccountSection">
-            <h2>My Account</h2>
-            <form id="accountForm">
-                <div class="input-group">
-                    <label for="currentPassword">Current Password:</label>
-                    <input type="password" id="currentPassword" name="currentPassword">
-                </div>
-                <div class="input-group">
-                    <label for="newPassword">New Password:</label>
-                    <input type="password" id="newPassword" name="newPassword">
-                </div>
-                <div class="input-group">
-                    <label for="confirmNewPassword">Confirm New Password:</label>
-                    <input type="password" id="confirmNewPassword" name="confirmNewPassword">
-                </div>
-                <div class="button-container">
-                    <button type="submit">Update Password</button>
-                </div>
-            </form>
-            <p id="accountErrorMessage" class="hidden" style="color: red; text-align: center; margin-top: 15px;">Error messages will appear here.</p>
+            <!-- My Account Page -->
+            <div class="account-page" id="myAccountSection">
+                <h2>My Account</h2>
+                <form id="accountForm">
+                    <div class="input-group">
+                        <label for="currentPassword">Current Password:</label>
+                        <input type="password" id="currentPassword" name="currentPassword">
+                    </div>
+                    <div class="input-group">
+                        <label for="newPassword">New Password:</label>
+                        <input type="password" id="newPassword" name="newPassword">
+                    </div>
+                    <div class="input-group">
+                        <label for="confirmNewPassword">Confirm New Password:</label>
+                        <input type="password" id="confirmNewPassword" name="confirmNewPassword">
+                    </div>
+                    <div class="button-container">
+                        <button type="submit">Update Password</button>
+                    </div>
+                </form>
+                <p id="accountErrorMessage" class="hidden" style="color: red; text-align: center; margin-top: 15px;">Error messages will appear here.</p>
+            </div>
         </div>
     </div>
 
@@ -523,6 +517,7 @@
         const sidebar = document.getElementById('mySidebar');
         const menuToggleIcon = document.getElementById('menuToggle');
         const mainContent = document.getElementById('mainContent');
+        const contentWrapper = mainContent.querySelector('.content-wrapper'); // Get the wrapper
         const loginSection = document.getElementById('loginSection');
         const registerSection = document.getElementById('registerSection');
         const homeSection = document.getElementById('homeSection');
@@ -589,15 +584,17 @@
                 sidebar.style.width = '0';
                 mainContent.classList.remove('sidebar-open');
                 sidebarToggleIcon.classList.remove('visible'); // Hide icon when sidebar closes
+                sidebarToggleIcon.style.left = '15px'; // Reset icon position
             } else {
                 sidebar.style.width = '250px';
                 mainContent.classList.add('sidebar-open');
                 sidebarToggleIcon.classList.add('visible'); // Show icon when sidebar opens
+                sidebarToggleIcon.style.left = '265px'; // Adjust icon position when sidebar opens
             }
         }
 
         function showView(viewToShow) {
-            // Hide all page content
+            // Hide all content wrappers/sections
             hideElement(loginSection);
             hideElement(registerSection);
             hideElement(homeSection);
@@ -632,7 +629,8 @@
         showView(loginSection);
         hideElement(homeSection);
         hideElement(myAccountSection);
-        hideElement(sidebar); // Ensure sidebar is hidden initially
+        // Sidebar and hamburger icon are controlled by login state
+        sidebar.style.width = '0'; // Ensure sidebar is hidden initially
         sidebarToggleIcon.classList.remove('visible'); // Ensure icon is hidden initially
 
         // --- Event Listeners ---
@@ -646,12 +644,14 @@
             if (validUsers[enteredUsername] === enteredPassword) {
                 currentLoggedInUser = enteredUsername;
                 showView(homeSection);
-                // loginSection.style.display = 'none'; // Already handled by showView
                 loginErrorMessage.classList.add('hidden');
                 passwordInput.value = '';
-                usernameInput.value = ''; // Clear username too
-                // Make hamburger icon visible only after login
-                sidebarToggleIcon.classList.add('visible');
+                usernameInput.value = '';
+                sidebarToggleIcon.classList.add('visible'); // Make hamburger icon visible
+                // If sidebar was open from a previous session, close it on login
+                if(sidebar.style.width === '250px') {
+                    toggleSidebar();
+                }
             } else {
                 loginErrorMessage.classList.remove('hidden');
                 passwordInput.value = ''; // Clear password for security
@@ -666,14 +666,12 @@
         // Show Register Form
         showRegisterFormSpan.addEventListener('click', () => {
             showView(registerSection);
-            // loginSection.style.display = 'none'; // Handled by showView
             registerErrorMessage.classList.add('hidden');
         });
 
         // Show Login Form from Register Form
         showLoginFormSpan.addEventListener('click', () => {
             showView(loginSection);
-            // registerSection.style.display = 'none'; // Handled by showView
             registrationForm.reset();
             registerErrorMessage.classList.add('hidden');
         });
@@ -701,8 +699,10 @@
         // Hamburger Menu Toggle
         menuToggleIcon.addEventListener('click', toggleSidebar);
 
-        // Close Sidebar when clicking outside of it
+        // Close Sidebar when clicking outside of it (and not on the toggle icon)
+        // This listener is attached to mainContent to detect clicks within the main area
         mainContent.addEventListener('click', function(event) {
+            // Check if sidebar is open AND the click was NOT inside the sidebar AND NOT on the toggle icon
             if (sidebar.style.width === '250px' && !sidebar.contains(event.target) && !menuToggleIcon.contains(event.target)) {
                 toggleSidebar();
             }
@@ -723,7 +723,7 @@
             sidebarToggleIcon.classList.remove('visible'); // Hide hamburger icon on logout
             toggleSidebar(); // Close sidebar
             sidebar.style.width = '0'; // Ensure sidebar is truly closed
-            mainContent.classList.remove('sidebar-open');
+            mainContent.classList.remove('sidebar-open'); // Reset main content margin
         });
 
         // Menu Dark Mode Toggle (syncs with login toggle)
@@ -738,7 +738,7 @@
             const newPw = newPasswordInput.value;
             const confirmNewPw = confirmNewPasswordInput.value;
 
-            // Basic validation (in real app, would check currentPw against stored password)
+            // Basic validation
             if (newPw !== confirmNewPw) {
                 accountErrorMessage.textContent = 'New passwords do not match.';
                 showElement(accountErrorMessage);
@@ -750,6 +750,7 @@
                 return;
             }
 
+            // Simulate password change.
             alert('Password updated successfully! (Simulated)');
             accountForm.reset();
             accountErrorMessage.classList.add('hidden');
