@@ -1,780 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momin's Teaching Home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --primary-hover-color: #0056b3;
-            --text-color-light: #333;
-            --text-color-dark: #eee;
-            --background-light: #f4f7f6;
-            --background-dark: #222;
-            --card-background-light: #ffffff;
-            --card-background-dark: #333;
-            --menu-background-light: #e9ecef;
-            --menu-background-dark: #444;
-            --input-border-light: #ccc;
-            --input-border-dark: #555;
-            --input-background-dark: #444;
-            --dropdown-background-light: #f9f9f9;
-            --dropdown-background-dark: #555;
-            --dropdown-link-color-light: #333;
-            --dropdown-link-color-dark: #ccc;
-            --link-color-light: #007bff;
-            --link-color-dark: #9acffa;
-
-            /* Home Page Wallpaper */
-            --home-wallpaper-url: url('https://images.unsplash.com/photo-1503676260628-75372592062d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80'); /* Example Wallpaper */
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-light);
-            color: var(--text-color-light);
-            margin: 0;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            /* overflow: hidden;  Removed to allow scrolling */
-            height: 100vh; /* Essential for fixed sidebar and content height */
-            display: flex; /* Use flexbox to manage sidebar and main content */
-        }
-
-        body.dark-mode {
-            background-color: var(--background-dark);
-            color: var(--text-color-dark);
-        }
-
-        /* --- Sidebar Menu --- */
-        .sidebar {
-            height: 100vh; /* Full viewport height */
-            width: 0; /* Initially closed */
-            position: fixed; /* Fixed position to stay visible */
-            z-index: 1000;
-            top: 0;
-            left: 0;
-            background-color: var(--menu-background-light);
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        body.dark-mode .sidebar {
-            background-color: var(--menu-background-dark);
-        }
-
-        /* Hamburger Icon - Initially hidden, shown after login */
-        .sidebar-toggle-icon {
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            font-size: 28px;
-            cursor: pointer;
-            z-index: 1001;
-            color: var(--primary-color);
-            transition: color 0.3s ease, opacity 0.3s ease, left 0.5s ease; /* Added left transition */
-            opacity: 0;
-            display: none;
-        }
-        .sidebar-toggle-icon.visible {
-            opacity: 1;
-            display: block;
-        }
-
-        body.dark-mode .sidebar-toggle-icon {
-            color: var(--link-color-dark);
-        }
-        .sidebar-toggle-icon:hover {
-            color: var(--primary-hover-color);
-        }
-        body.dark-mode .sidebar-toggle-icon:hover {
-            color: #fff;
-        }
-
-        .sidebar a {
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 20px;
-            color: var(--link-color-light);
-            display: block;
-            transition: 0.3s;
-        }
-        body.dark-mode .sidebar a {
-            color: var(--link-color-dark);
-        }
-        .sidebar a:hover {
-            color: var(--primary-hover-color);
-            background-color: rgba(0,0,0,0.05);
-        }
-        body.dark-mode .sidebar a:hover {
-            color: #fff;
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        .sidebar .settings-dropdown {
-            position: relative;
-            display: block;
-        }
-        .sidebar .settings-dropdown .dropdown-content {
-            display: none;
-            position: static;
-            background-color: var(--dropdown-background-light);
-            padding: 5px 0;
-            margin-left: 20px;
-            box-shadow: none;
-            border-radius: 0;
-        }
-        body.dark-mode .sidebar .settings-dropdown .dropdown-content {
-            background-color: var(--dropdown-background-dark);
-        }
-        .sidebar .settings-dropdown .dropdown-content a {
-            font-size: 16px;
-            padding: 10px 25px;
-            color: var(--dropdown-link-color-light);
-        }
-        body.dark-mode .sidebar .settings-dropdown .dropdown-content a {
-            color: var(--dropdown-link-color-dark);
-        }
-        .sidebar .settings-dropdown .dropdown-content a:hover {
-            background-color: rgba(0,0,0,0.1);
-        }
-        body.dark-mode .sidebar .settings-dropdown .dropdown-content a:hover {
-            background-color: rgba(255,255,255,0.15);
-            color: #fff;
-        }
-        .sidebar .settings-dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* --- Main Content Area --- */
-        .main-content {
-            flex-grow: 1; /* Allow main content to take available space */
-            overflow-y: auto; /* Enable scrolling ONLY for the main content */
-            transition: margin-left 0.5s;
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative; /* For centering content */
-        }
-
-        .sidebar-open .main-content {
-            margin-left: 250px; /* Pushes content when sidebar is open */
-        }
-
-        /* Centering content within the main area */
-        .content-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 40px); /* Adjust height for padding */
-            padding: 0px 20px; /* Matches main-content padding */
-        }
-
-        /* --- Login Section --- */
-        .login-container {
-            background-color: var(--card-background-light);
-            padding: 40px 50px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            width: 350px;
-            animation: fadeIn 0.5s ease-in-out;
-            margin: 0 auto; /* Center horizontally within content-wrapper */
-        }
-        body.dark-mode .login-container {
-            background-color: var(--card-background-dark);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .login-container h1 { color: var(--text-color-light); margin-bottom: 30px; font-size: 28px; font-weight: 600; }
-        body.dark-mode .login-container h1 { color: var(--text-color-dark); }
-        .login-container .input-group { margin-bottom: 20px; text-align: left; }
-        .login-container label { display: block; margin-bottom: 8px; color: #555; font-weight: 500; }
-        body.dark-mode .login-container label { color: #ccc; }
-        .login-container input[type="text"],
-        .login-container input[type="password"],
-        .login-container input[type="email"],
-        .login-container input[type="tel"] {
-            width: calc(100% - 20px); padding: 12px 10px; border: 1px solid var(--input-border-light); border-radius: 5px; font-size: 16px; transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-        }
-        body.dark-mode .login-container input[type="text"],
-        body.dark-mode .login-container input[type="password"],
-        body.dark-mode .login-container input[type="email"],
-        body.dark-mode .login-container input[type="tel"] {
-            border-color: var(--input-border-dark); background-color: var(--input-background-dark); color: var(--text-color-dark);
-        }
-        .login-container input[type="text"]:focus,
-        .login-container input[type="password"]:focus,
-        .login-container input[type="email"]:focus,
-        .login-container input[type="tel"]:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); outline: none; }
-        .login-button {
-            width: 100%; padding: 15px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease; margin-top: 10px;
-        }
-        .login-button:hover { background-color: var(--primary-hover-color); transform: translateY(-2px); }
-        .login-button:active { transform: translateY(0); }
-        #loginErrorMessage { color: red; margin-top: 15px; display: none; font-weight: bold; }
-        .login-register-toggle { margin-top: 20px; font-size: 14px; }
-        .login-register-toggle span { cursor: pointer; color: var(--primary-color); font-weight: bold; margin-left: 5px; }
-        body.dark-mode .login-register-toggle span { color: var(--link-color-dark); }
-
-        .login-theme-toggle {
-            display: flex; align-items: center; gap: 10px; justify-content: center; margin-top: 20px; font-size: 16px; color: #555;
-        }
-        body.dark-mode .login-theme-toggle { color: #ccc; }
-        .login-theme-toggle .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
-        .login-theme-toggle .switch input { opacity: 0; width: 0; height: 0; }
-        .login-theme-toggle .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 22px; }
-        .login-theme-toggle .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #2196F3; }
-        input:checked + .slider:before { transform: translateX(18px); }
-
-
-        /* --- Home Page Content --- */
-        .home-content {
-            display: none;
-            height: 100%; /* Take full height of its parent (.content-wrapper) */
-            background-image: var(--home-wallpaper-url);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            position: relative;
-            z-index: 1; /* Below overlay */
-            text-align: center; /* Center content if flexbox is not used for centering */
-            color: #fff; /* Default text color for wallpaper */
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-        }
-
-        .home-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 2; /* Above background, below content */
-        }
-
-        .home-content .content-wrapper { /* Wrapper for home content */
-            position: relative; /* Above overlay */
-            z-index: 3;
-            padding: 20px; /* Add padding here too */
-        }
-
-        .home-content h2 {
-            font-size: 48px;
-            margin-bottom: 40px;
-            animation: fadeInWelcome 1s ease-in-out;
-        }
-        @keyframes fadeInWelcome {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .home-content p {
-            font-size: 20px;
-        }
-        body.dark-mode .home-content h2, body.dark-mode .home-content p {
-            color: #fff;
-        }
-        body.dark-mode .home-content::before {
-             background: rgba(0, 0, 0, 0.5);
-        }
-
-
-        /* --- My Account Page --- */
-        .account-page {
-            display: none;
-            background-color: var(--card-background-light);
-            padding: 40px 50px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            width: 380px; /* Increased width slightly */
-            animation: fadeIn 0.5s ease-in-out;
-            margin: 0 auto; /* Center horizontally within content-wrapper */
-        }
-        body.dark-mode .account-page {
-            background-color: var(--card-background-dark);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        .account-page h2 {
-            margin-bottom: 30px;
-            color: var(--primary-color);
-        }
-        .account-page .input-group { margin-bottom: 15px; text-align: left; }
-        .account-page label { font-weight: bold; margin-bottom: 5px; color: var(--text-color-light); }
-        body.dark-mode .account-page label { color: var(--text-color-dark); }
-        .account-page input {
-            width: calc(100% - 12px); padding: 10px; border: 1px solid var(--input-border-light); border-radius: 5px; font-size: 16px;
-        }
-        body.dark-mode .account-page input {
-            border-color: var(--input-border-dark); background-color: var(--input-background-dark); color: var(--text-color-dark);
-        }
-        .account-page .button-container { margin-top: 30px; }
-        .account-page button {
-            padding: 12px 25px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;
-        }
-        .account-page button:hover { background-color: var(--primary-hover-color); }
-
-        /* --- Registration Form --- */
-        .register-form-container {
-            display: none;
-            background-color: var(--card-background-light);
-            padding: 40px 50px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            width: 380px;
-            animation: fadeIn 0.5s ease-in-out;
-            margin: 0 auto; /* Center horizontally within content-wrapper */
-            max-height: calc(100vh - 40px); /* Limit height to fit within main-content padding */
-            overflow-y: auto;
-        }
-        body.dark-mode .register-form-container {
-            background-color: var(--card-background-dark);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        .register-form-container h1 { color: var(--text-color-light); margin-bottom: 25px; font-size: 26px; }
-        body.dark-mode .register-form-container h1 { color: var(--text-color-dark); }
-        .register-form-container .input-group { margin-bottom: 15px; text-align: left; }
-        .register-form-container label { display: block; margin-bottom: 6px; color: #555; font-weight: 500; }
-        body.dark-mode .register-form-container label { color: #ccc; }
-        .register-form-container input {
-            width: calc(100% - 20px); padding: 10px; border: 1px solid var(--input-border-light); border-radius: 5px; font-size: 15px;
-        }
-        body.dark-mode .register-form-container input {
-            border-color: var(--input-border-dark); background-color: var(--input-background-dark); color: var(--text-color-dark);
-        }
-        .register-form-container .terms {
-            margin-top: 15px; font-size: 14px; text-align: left; display: flex; align-items: center; gap: 10px;
-        }
-        .register-form-container .terms input[type="checkbox"] { width: auto; }
-        .register-form-container .terms label { margin-bottom: 0; font-weight: normal; }
-        body.dark-mode .register-form-container .terms label { color: #ccc; }
-        .register-form-container button[type="submit"] {
-            width: 100%; padding: 12px; margin-top: 25px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; font-size: 17px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease;
-        }
-        .register-form-container button[type="submit"]:hover { background-color: var(--primary-hover-color); }
-        .register-form-container .login-link { margin-top: 20px; font-size: 14px; }
-        .register-form-container .login-link span { cursor: pointer; color: var(--primary-color); font-weight: bold; }
-        body.dark-mode .register-form-container .login-link span { color: var(--link-color-dark); }
-
-        /* --- General Utility Styles --- */
-        .hidden { display: none !important; }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#4361ee">
+<title>Momin's Teaching Home</title>
+<style>
+:root{--bg:#f4f7fc;--card:#fff;--text:#1b2540;--muted:#748099;--line:#e4e9f3;--blue:#4361ee;--soft:#edf1ff;--shadow:0 10px 30px #26375c0b}
+body.dark{--bg:#111827;--card:#1e293b;--text:#f1f5ff;--muted:#aab5ca;--line:#354258;--soft:#293652;--shadow:0 10px 30px #0002}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);transition:background .25s,color .25s}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #a3b3ff;outline-offset:2px}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:bold;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.primary{background:var(--blue);color:white}
+.secondary{background:var(--soft);color:var(--text);border:1px solid var(--line)}
+.danger{background:#ffebeb;color:#b42332}
+body.dark .danger{background:#4a2930;color:#ffc3c3}
+.field{display:grid;gap:7px;margin:15px 0}
+.field label{font-size:14px;font-weight:bold}
+.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--text);min-height:43px}
+.field textarea{resize:vertical}
+.message{padding:11px;border-radius:9px;margin:12px 0;font-size:14px;line-height:1.5}
+.error{background:#ffeded;color:#a32332}
+.success{background:#e3fff0;color:#087443}
+body.dark .error{background:#482b34;color:#ffc0c0}
+body.dark .success{background:#173e31;color:#a7f0c9}
+.auth{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.hero{background:linear-gradient(135deg,#2948c7,#5267e8,#805ce5);color:white;padding:clamp(25px,6vw,75px);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero:after{content:"✦";position:absolute;right:-20px;bottom:-130px;font-size:260px;color:#ffffff15}
+.brand{font-size:19px;font-weight:800;display:flex;align-items:center;gap:12px}
+.logo{width:43px;height:43px;display:grid;place-items:center;background:#ffffff25;border-radius:13px;font-size:24px}
+.hero h1{font-size:clamp(38px,5vw,65px);letter-spacing:-2px;line-height:1.05;margin:55px 0 18px}
+.hero p{line-height:1.8;color:#edf0ff;max-width:460px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.pills span{padding:9px 12px;border:1px solid #ffffff55;border-radius:30px;font-size:13px}
+.auth-side{display:grid;place-items:center;padding:25px}
+.auth-card{width:min(100%,410px);animation:rise .4s ease}
+.auth-card h2{font-size:31px;margin:0 0 9px}
+.auth-card>p{color:var(--muted);line-height:1.6;margin-bottom:25px}
+.full{width:100%;margin-top:8px}
+.switch{text-align:center;color:var(--muted);font-size:14px;margin-top:20px}
+.textbtn{border:0;background:none;color:var(--blue);font-weight:bold}
+.fine{font-size:12px;color:var(--muted);line-height:1.6;margin-top:20px}
+.app{min-height:100vh;display:grid;grid-template-columns:245px minmax(0,1fr)}
+.sidebar{background:var(--card);border-right:1px solid var(--line);padding:22px 15px;display:flex;flex-direction:column;gap:25px;position:sticky;top:0;height:100vh;overflow:auto;z-index:5}
+.sidebar .brand{font-size:16px;padding:0 7px}
+.sidebar .logo{background:var(--blue);color:white}
+.brand small{display:block;color:var(--muted);font-size:11px;font-weight:normal;margin-top:4px}
+.navlabel{font-size:11px;font-weight:bold;color:var(--muted);letter-spacing:1px;padding:0 12px;margin-bottom:8px}
+.nav{display:grid;gap:5px}
+.nav button{border:0;background:transparent;color:var(--muted);padding:12px;border-radius:10px;text-align:left;font-weight:bold;display:flex;gap:11px;align-items:center}
+.nav button:hover,.nav button.active{background:var(--soft);color:var(--blue)}
+.sidebottom{margin-top:auto}
+.userrow{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:16px 5px;margin-top:15px;min-width:0}
+.avatar{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#4361ee,#9765e8);color:white;display:grid;place-items:center;font-weight:bold;flex-shrink:0}
+.userrow strong{font-size:13px;overflow-wrap:anywhere}
+.userrow small{display:block;color:var(--muted);margin-top:4px}
+.main{padding:27px clamp(15px,3vw,40px);min-width:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:27px}
+.topbar h1{margin:0;font-size:clamp(24px,3vw,33px);letter-spacing:-1px}
+.topbar p{margin:7px 0 0;color:var(--muted);font-size:14px}
+.actions{display:flex;gap:8px}
+.iconbtn{border:1px solid var(--line);background:var(--card);color:var(--text);width:42px;height:42px;border-radius:11px;font-size:17px}
+.mobilebrand{display:none}
+.page{display:none;animation:rise .3s ease}
+.page.active{display:block}
+.banner{padding:clamp(24px,4vw,37px);border-radius:21px;color:white;background:linear-gradient(120deg,#3454dc,#7960e5);position:relative;overflow:hidden}
+.banner:after{content:"✦";position:absolute;right:5%;bottom:-45px;font-size:150px;color:#ffffff18}
+.banner h2{font-size:clamp(25px,3vw,38px);margin:0 0 12px;position:relative;z-index:1}
+.banner p{line-height:1.7;max-width:570px;color:#eff0ff;position:relative;z-index:1}
+.banner button{position:relative;z-index:1;background:white;color:#3454dc}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
+.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);min-width:0}
+.stat{display:flex;align-items:center;gap:13px}
+.staticon{width:43px;height:43px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:20px}
+.stat strong{font-size:27px;display:block}
+.stat span:last-child{font-size:12px;color:var(--muted)}
+.columns{display:grid;grid-template-columns:1.25fr .75fr;gap:17px}
+.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.panelhead h3{margin:0;font-size:17px}
+.linkbtn{border:0;background:none;color:var(--blue);font-weight:bold}
+.routineitem{display:grid;grid-template-columns:78px 4px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.routineitem:last-child{border-bottom:0}
+.rtime{font-weight:bold;font-size:13px}
+.rline{border-radius:5px;background:var(--blue)}
+.routineitem strong{font-size:14px}
+.routineitem small{display:block;color:var(--muted);margin-top:5px}
+.noticeitem{padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--bg);margin-bottom:10px}
+.noticeitem strong{font-size:14px}
+.noticeitem p{font-size:13px;line-height:1.6;color:var(--muted);margin:7px 0}
+.meta{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.heading h2{margin:0;font-size:25px}
+.heading p{color:var(--muted);font-size:14px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:650px}
+th,td{text-align:left;padding:14px;border-bottom:1px solid var(--line);font-size:13px}
+th{background:var(--soft);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+tr:last-child td{border-bottom:0}
+td .btn{padding:7px 9px;font-size:12px;margin:2px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.badge{display:inline-block;background:var(--soft);color:var(--blue);border-radius:20px;padding:5px 9px;font-size:11px;font-weight:bold;margin-bottom:10px}
+.empty{padding:25px;text-align:center;color:var(--muted);font-size:14px}
+.settingsgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.setting{border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:12px}
+.setting strong{display:block;margin-bottom:7px}
+.setting p{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 12px}
+.setting input[type=range]{width:100%;accent-color:var(--blue)}
+.setting input[type=checkbox]{accent-color:var(--blue);width:17px;height:17px}
+.settingline{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.modalroot{position:fixed;inset:0;background:#10182c88;display:grid;place-items:center;padding:15px;z-index:30}
+.modal{width:min(100%,500px);max-height:90vh;overflow:auto;background:var(--card);border-radius:18px;padding:22px;box-shadow:0 25px 80px #0003;animation:rise .25s ease}
+.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.modalhead h3{margin:0}
+.toast{position:fixed;right:20px;bottom:20px;background:#172033;color:white;padding:13px 18px;border-radius:11px;box-shadow:0 10px 30px #0002;z-index:50;max-width:calc(100% - 40px);animation:rise .25s ease}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.auth{grid-template-columns:1fr}.hero{display:none}.app{grid-template-columns:1fr}.sidebar{position:fixed;left:-260px;top:0;width:245px;transition:left .25s;box-shadow:var(--shadow)}.sidebar.open{left:0}.mobilebrand{display:flex;align-items:center;gap:8px}.mobilebrand .logo{width:36px;height:36px;font-size:19px}.topbar h1{font-size:24px}.columns{grid-template-columns:1fr}}
+@media(max-width:600px){.main{padding:18px 13px 35px}.stats{grid-template-columns:1fr}.stat{padding:15px}.stat strong{font-size:24px}.cards,.settingsgrid{grid-template-columns:1fr}.topbar{align-items:flex-start}.topbar p{max-width:210px}.top-actions{gap:5px}.iconbtn{width:38px;height:38px}.panel{padding:15px}.banner{padding:22px}.heading h2{font-size:22px}.routineitem{grid-template-columns:67px 4px 1fr;gap:9px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
 </head>
 <body>
+<div id="auth" class="auth">
+  <section class="hero">
+    <div class="brand"><div class="logo">✦</div><div>Momin's Teaching Home</div></div>
+    <div>
+      <div class="badge" style="background:#ffffff22;color:white">YOUR LEARNING SPACE</div>
+      <h1>Learn today.<br>Lead tomorrow.</h1>
+      <p>A friendly place to organize your classes, stay updated with announcements, and make every learning day count.</p>
+      <div class="pills"><span>📚 Class Routine</span><span>📢 Notices</span><span>⚙️ Personal Settings</span></div>
+    </div>
+    <p class="small">A simple learning dashboard for your everyday progress.</p>
+  </section>
+  <section class="auth-side">
+    <div class="auth-card">
+      <div class="brand"><div class="logo" style="background:var(--blue);color:white">✦</div><div>Momin's Teaching Home</div></div>
+      <div id="loginBox">
+        <h2 style="margin-top:28px">Welcome back</h2>
+        <p>Sign in to continue to your learning dashboard.</p>
+        <form id="loginForm">
+          <div class="field"><label for="loginUser">Username</label><input id="loginUser" autocomplete="username" required placeholder="Enter your username"></div>
+          <div class="field"><label for="loginPass">Password</label><input id="loginPass" type="password" autocomplete="current-password" required placeholder="Enter your password"></div>
+          <label class="checkrow"><input id="rememberLogin" type="checkbox"> Remember me on this device</label>
+          <div id="loginMsg" aria-live="polite"></div>
+          <button class="btn primary full" type="submit">Sign In</button>
+        </form>
+        <div class="switch">Don't have an account? <button class="textbtn" id="toRegister" type="button">Create account</button></div>
+      </div>
+      <div id="registerBox" class="hidden">
+        <h2 style="margin-top:28px">Create your account</h2>
+        <p>Join your learning space in a few simple steps.</p>
+        <form id="registerForm">
+          <div class="field"><label for="regName">Full name</label><input id="regName" required minlength="2" maxlength="80" placeholder="Your full name"></div>
+          <div class="field"><label for="regUser">Username</label><input id="regUser" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_.-]+" autocomplete="username" placeholder="3–24 letters, numbers, . _ -"></div>
+          <div class="field"><label for="regEmail">Email (optional)</label><input id="regEmail" type="email" placeholder="you@example.com"></div>
+          <div class="field"><label for="regPass">Password</label><input id="regPass" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></div>
+          <div class="field"><label for="regConfirm">Confirm password</label><input id="regConfirm" type="password" required minlength="8" autocomplete="new-password" placeholder="Enter password again"></div>
+          <label class="checkrow"><input id="acceptLocal" type="checkbox" required> I understand this demo saves account data in this browser.</label>
+          <div id="registerMsg" aria-live="polite"></div>
+          <button class="btn primary full" type="submit">Create Account</button>
+        </form>
+        <div class="switch">Already registered? <button class="textbtn" id="toLogin" type="button">Sign in</button></div>
+      </div>
+      <p class="fine">Demo notice: this is a browser-only website. Account data is stored locally on this device, not on a secure server. Do not use a real or sensitive password.</p>
+    </div>
+  </section>
+</div>
 
-    <!-- Sidebar Menu -->
-    <div id="mySidebar" class="sidebar">
-        <a href="#" id="sidebar-home">Home</a>
-        <a href="#" id="sidebar-classes">Class Rutin</a>
-        <a href="#" id="sidebar-notices">Notices</a>
-        <div class="settings-dropdown">
-            <a href="#">Settings</a>
-            <div class="dropdown-content">
-                <div class="dark-mode-toggle">
-                    <label for="menuDarkModeSwitch">Dark Mode</label>
-                    <label class="switch">
-                        <input type="checkbox" id="menuDarkModeSwitch">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <a href="#" id="sidebar-brightness">Brightness</a>
-                <a href="#" id="sidebar-password-change">Password Change</a>
-            </div>
+<div id="app" class="app hidden">
+  <aside id="sidebar" class="sidebar">
+    <div class="brand"><div class="logo">✦</div><div class="brand-name">Momin's Teaching Home<small>Learning Dashboard</small></div></div>
+    <div>
+      <div class="navlabel">WORKSPACE</div>
+      <nav class="nav">
+        <button class="active" data-page="dashboard"><span>▦</span> Dashboard</button>
+        <button data-page="routine"><span>▤</span> Class Routine</button>
+        <button data-page="notices"><span>♧</span> Notices</button>
+        <button data-page="settings"><span>⚙</span> Settings</button>
+      </nav>
+    </div>
+    <div class="sidebottom">
+      <button id="sideTheme" class="btn secondary full" type="button">☾ Toggle Appearance</button>
+      <div class="userrow"><div class="avatar" id="sideAvatar">M</div><div style="min-width:0"><strong id="sideName">Student</strong><small id="sideUsername">@student</small></div></div>
+      <button id="logout" class="btn secondary full" type="button">Sign Out</button>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;min-width:0">
+        <button id="menuBtn" class="iconbtn" type="button" aria-label="Open menu">☰</button>
+        <div class="mobilebrand"><div class="logo">✦</div></div>
+        <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Your learning space at a glance.</p></div>
+      </div>
+      <div class="actions"><button id="themeBtn" class="iconbtn" type="button" aria-label="Toggle theme">☾</button><button id="settingsBtn" class="iconbtn" type="button" aria-label="Open settings">⚙</button></div>
+    </header>
+
+    <section id="page-dashboard" class="page active">
+      <div class="banner"><div class="badge" style="background:#ffffff22;color:white">YOUR PERSONAL SPACE</div><h2 id="welcome">Welcome back!</h2><p>Keep your learning organized, check your upcoming classes, and stay informed about the latest notices.</p><button id="viewRoutine" class="btn" type="button">View Class Routine →</button></div>
+      <div class="stats">
+        <div class="stat"><div class="staticon">📚</div><div><strong id="statClasses">0</strong><span>Scheduled classes</span></div></div>
+        <div class="stat"><div class="staticon">📢</div><div><strong id="statNotices">0</strong><span>Published notices</span></div></div>
+        <div class="stat"><div class="staticon">✓</div><div><strong id="statDays">7</strong><span>Days to stay on track</span></div></div>
+      </div>
+      <div class="columns">
+        <div class="panel"><div class="panelhead"><h3>Upcoming Classes</h3><button class="linkbtn" data-goto="routine" type="button">View all</button></div><div id="upcoming"></div></div>
+        <div class="panel"><div class="panelhead"><h3>Latest Notices</h3><button class="linkbtn" data-goto="notices" type="button">View all</button></div><div id="latestNotices"></div></div>
+      </div>
+    </section>
+
+    <section id="page-routine" class="page">
+      <div class="heading"><div><h2>Class Routine</h2><p class="muted">Manage your weekly learning schedule.</p></div><button id="addClass" class="btn primary" type="button">＋ Add Class</button></div>
+      <div class="panel" style="margin-bottom:16px"><div class="field" style="max-width:260px;margin:0"><label for="dayFilter">Filter by day</label><select id="dayFilter"><option value="All">All days</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div></div>
+      <div class="tablewrap"><table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Teacher</th><th>Room / Link</th><th>Actions</th></tr></thead><tbody id="routineBody"></tbody></table></div>
+      <p class="muted small">Your routine is saved in this browser. Changes are not shared with other visitors.</p>
+    </section>
+
+    <section id="page-notices" class="page">
+      <div class="heading"><div><h2>Notices & Announcements</h2><p class="muted">Important updates for your learning space.</p></div><button id="addNotice" class="btn primary" type="button">＋ Add Notice</button></div>
+      <div id="noticeGrid" class="cards"></div>
+    </section>
+
+    <section id="page-settings" class="page">
+      <div class="heading"><div><h2>Settings</h2><p class="muted">Customize your experience and account.</p></div></div>
+      <div class="settingsgrid">
+        <div class="panel">
+          <h3>Appearance</h3><p class="muted small">Choose how your dashboard looks.</p>
+          <div class="setting"><div class="settingline"><strong>Dark mode</strong><input id="darkMode" type="checkbox" aria-label="Dark mode"></div><p>Switch between light and dark themes.</p></div>
+          <div class="setting"><div class="settingline"><strong>Brightness</strong><span id="brightLabel" class="muted small">100%</span></div><input id="brightness" type="range" min="70" max="120" value="100" aria-label="Brightness"><p>Adjust the brightness of the page.</p></div>
+          <div class="setting"><div class="settingline"><strong>Animations</strong><input id="animations" type="checkbox" checked aria-label="Animations"></div><p>Enable or reduce interface animations.</p></div>
+          <div class="setting"><div class="settingline"><strong>Remember sign-in</strong><input id="rememberSetting" type="checkbox" aria-label="Remember sign-in"></div><p>Keep your sign-in active on this browser.</p></div>
         </div>
-        <a href="#" id="sidebar-my-account">My Account</a>
-        <a href="#" id="sidebar-logout">Logout</a>
-    </div>
-
-    <!-- Hamburger Icon -->
-    <div class="sidebar-toggle-icon" id="menuToggle">
-        <i class="fas fa-bars"></i>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="main-content" id="mainContent">
-        <!-- Wrapper for centering content like forms and home page -->
-        <div class="content-wrapper">
-
-            <!-- Login Section -->
-            <div class="login-container" id="loginSection">
-                <h1>Momin's Teaching Home</h1>
-                <form id="loginForm">
-                    <div class="input-group">
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    </div>
-                    <button type="submit" class="login-button">Login</button>
-                </form>
-                <p id="loginErrorMessage" class="hidden">Invalid username or password.</p>
-                <div class="login-theme-toggle">
-                    <label for="loginDarkModeSwitch">Dark Mode</label>
-                    <label class="switch">
-                        <input type="checkbox" id="loginDarkModeSwitch">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="login-register-toggle">
-                    No account? <span id="showRegisterForm">Register Account now.</span>
-                </div>
-            </div>
-
-            <!-- Registration Form Section -->
-            <div class="register-form-container" id="registerSection">
-                <h1>Create Your Account</h1>
-                <form id="registrationForm">
-                    <div class="input-group">
-                        <label for="firstName">First Name:</label>
-                        <input type="text" id="firstName" name="firstName" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="lastName">Last Name:</label>
-                        <input type="text" id="lastName" name="lastName" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="phone">Phone:</label>
-                        <input type="tel" id="phone" name="phone">
-                    </div>
-                    <div class="input-group">
-                        <label for="regUsername">Username:</label>
-                        <input type="text" id="regUsername" name="regUsername" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="regPassword">Password:</label>
-                        <input type="password" id="regPassword" name="regPassword" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="confirmPassword">Confirm Password:</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required>
-                    </div>
-                    <div class="terms">
-                        <input type="checkbox" id="termsCheckbox" name="terms" required>
-                        <label for="termsCheckbox">I accept the <a href="#" id="termsLink">Terms and Policies</a></label>
-                    </div>
-                    <button type="submit" class="login-button">Register</button>
-                </form>
-                <p id="registerErrorMessage" class="hidden" style="color: red; text-align: center; margin-top: 15px;">Error messages will appear here.</p>
-                <div class="login-link">
-                    Already have an account? <span id="showLoginForm">Login here.</span>
-                </div>
-            </div>
-
-            <!-- Home Page Content -->
-            <div class="home-content" id="homeSection">
-                <div class="content-wrapper">
-                    <h2>Wellcome to Momin's Teaching Home</h2>
-                    <p>Your gateway to learning and growth.</p>
-                </div>
-            </div>
-
-            <!-- My Account Page -->
-            <div class="account-page" id="myAccountSection">
-                <h2>My Account</h2>
-                <form id="accountForm">
-                    <div class="input-group">
-                        <label for="currentPassword">Current Password:</label>
-                        <input type="password" id="currentPassword" name="currentPassword">
-                    </div>
-                    <div class="input-group">
-                        <label for="newPassword">New Password:</label>
-                        <input type="password" id="newPassword" name="newPassword">
-                    </div>
-                    <div class="input-group">
-                        <label for="confirmNewPassword">Confirm New Password:</label>
-                        <input type="password" id="confirmNewPassword" name="confirmNewPassword">
-                    </div>
-                    <div class="button-container">
-                        <button type="submit">Update Password</button>
-                    </div>
-                </form>
-                <p id="accountErrorMessage" class="hidden" style="color: red; text-align: center; margin-top: 15px;">Error messages will appear here.</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- DOM Elements ---
-        const bodyElement = document.body;
-        const sidebar = document.getElementById('mySidebar');
-        const menuToggleIcon = document.getElementById('menuToggle');
-        const mainContent = document.getElementById('mainContent');
-        const contentWrapper = mainContent.querySelector('.content-wrapper'); // Get the wrapper
-        const loginSection = document.getElementById('loginSection');
-        const registerSection = document.getElementById('registerSection');
-        const homeSection = document.getElementById('homeSection');
-        const myAccountSection = document.getElementById('myAccountSection');
-
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const loginForm = document.getElementById('loginForm');
-        const loginErrorMessage = document.getElementById('loginErrorMessage');
-        const loginDarkModeSwitch = document.getElementById('loginDarkModeSwitch');
-        const showRegisterFormSpan = document.getElementById('showRegisterForm');
-        const showLoginFormSpan = document.getElementById('showLoginForm');
-
-        const regFirstName = document.getElementById('firstName');
-        const regLastName = document.getElementById('lastName');
-        const regPhone = document.getElementById('phone');
-        const regUsername = document.getElementById('regUsername');
-        const regEmail = document.getElementById('email');
-        const regPassword = document.getElementById('regPassword');
-        const confirmPassword = document.getElementById('confirmPassword');
-        const termsCheckbox = document.getElementById('termsCheckbox');
-        const registrationForm = document.getElementById('registrationForm');
-        const registerErrorMessage = document.getElementById('registerErrorMessage');
-
-        const accountForm = document.getElementById('accountForm');
-        const currentPasswordInput = document.getElementById('currentPassword');
-        const newPasswordInput = document.getElementById('newPassword');
-        const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
-        const accountErrorMessage = document.getElementById('accountErrorMessage');
-
-        const menuDarkModeSwitch = document.getElementById('menuDarkModeSwitch');
-        const sidebarToggleIcon = document.querySelector('.sidebar-toggle-icon');
-
-        // Sidebar links
-        const sidebarHome = document.getElementById('sidebar-home');
-        const sidebarClasses = document.getElementById('sidebar-classes');
-        const sidebarNotices = document.getElementById('sidebar-notices');
-        const sidebarBrightness = document.getElementById('sidebar-brightness');
-        const sidebarPasswordChange = document.getElementById('sidebar-password-change');
-        const sidebarMyAccount = document.getElementById('sidebar-my-account');
-        const sidebarLogout = document.getElementById('sidebar-logout');
-
-        // --- Global Variables ---
-        let currentLoggedInUser = null;
-        const validUsers = {
-            'Wasik4110': 'wasik22bd',
-            'Sojib377': 'sbj377'
-        };
-
-        // --- Helper Functions ---
-        function showElement(element) {
-            element.classList.remove('hidden');
-            element.style.display = 'block';
-        }
-
-        function hideElement(element) {
-            element.classList.add('hidden');
-            element.style.display = 'none';
-        }
-
-        function toggleSidebar() {
-            const isSidebarOpen = sidebar.style.width === '250px';
-            if (isSidebarOpen) {
-                sidebar.style.width = '0';
-                mainContent.classList.remove('sidebar-open');
-                sidebarToggleIcon.classList.remove('visible'); // Hide icon when sidebar closes
-                sidebarToggleIcon.style.left = '15px'; // Reset icon position
-            } else {
-                sidebar.style.width = '250px';
-                mainContent.classList.add('sidebar-open');
-                sidebarToggleIcon.classList.add('visible'); // Show icon when sidebar opens
-                sidebarToggleIcon.style.left = '265px'; // Adjust icon position when sidebar opens
-            }
-        }
-
-        function showView(viewToShow) {
-            // Hide all content wrappers/sections
-            hideElement(loginSection);
-            hideElement(registerSection);
-            hideElement(homeSection);
-            hideElement(myAccountSection);
-
-            // Show the requested view
-            showElement(viewToShow);
-        }
-
-        function applyDarkMode(isDark) {
-            if (isDark) {
-                bodyElement.classList.add('dark-mode');
-                loginDarkModeSwitch.checked = true;
-                menuDarkModeSwitch.checked = true;
-            } else {
-                bodyElement.classList.remove('dark-mode');
-                loginDarkModeSwitch.checked = false;
-                menuDarkModeSwitch.checked = false;
-            }
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        }
-
-        // --- Initialization ---
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark' || (savedTheme === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            applyDarkMode(true);
-        } else {
-            applyDarkMode(false);
-        }
-
-        // Initially show login form and hide other elements
-        showView(loginSection);
-        hideElement(homeSection);
-        hideElement(myAccountSection);
-        // Sidebar and hamburger icon are controlled by login state
-        sidebar.style.width = '0'; // Ensure sidebar is hidden initially
-        sidebarToggleIcon.classList.remove('visible'); // Ensure icon is hidden initially
-
-        // --- Event Listeners ---
-
-        // Login Form Submission
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const enteredUsername = usernameInput.value;
-            const enteredPassword = passwordInput.value;
-
-            if (validUsers[enteredUsername] === enteredPassword) {
-                currentLoggedInUser = enteredUsername;
-                showView(homeSection);
-                loginErrorMessage.classList.add('hidden');
-                passwordInput.value = '';
-                usernameInput.value = '';
-                sidebarToggleIcon.classList.add('visible'); // Make hamburger icon visible
-                // If sidebar was open from a previous session, close it on login
-                if(sidebar.style.width === '250px') {
-                    toggleSidebar();
-                }
-            } else {
-                loginErrorMessage.classList.remove('hidden');
-                passwordInput.value = ''; // Clear password for security
-            }
-        });
-
-        // Login Dark Mode Toggle
-        loginDarkModeSwitch.addEventListener('change', function() {
-            applyDarkMode(this.checked);
-        });
-
-        // Show Register Form
-        showRegisterFormSpan.addEventListener('click', () => {
-            showView(registerSection);
-            registerErrorMessage.classList.add('hidden');
-        });
-
-        // Show Login Form from Register Form
-        showLoginFormSpan.addEventListener('click', () => {
-            showView(loginSection);
-            registrationForm.reset();
-            registerErrorMessage.classList.add('hidden');
-        });
-
-        // Registration Form Submission
-        registrationForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            if (regPassword.value !== confirmPassword.value) {
-                registerErrorMessage.textContent = 'Passwords do not match.';
-                showElement(registerErrorMessage);
-                return;
-            }
-            if (!termsCheckbox.checked) {
-                registerErrorMessage.textContent = 'Please accept the terms and policies.';
-                showElement(registerErrorMessage);
-                return;
-            }
-
-            alert('Registration successful! You can now log in.');
-            showView(loginSection);
-            registrationForm.reset();
-            registerErrorMessage.classList.add('hidden');
-        });
-
-        // Hamburger Menu Toggle
-        menuToggleIcon.addEventListener('click', toggleSidebar);
-
-        // Close Sidebar when clicking outside of it (and not on the toggle icon)
-        // This listener is attached to mainContent to detect clicks within the main area
-        mainContent.addEventListener('click', function(event) {
-            // Check if sidebar is open AND the click was NOT inside the sidebar AND NOT on the toggle icon
-            if (sidebar.style.width === '250px' && !sidebar.contains(event.target) && !menuToggleIcon.contains(event.target)) {
-                toggleSidebar();
-            }
-        });
-
-        // Sidebar Menu Item Clicks
-        sidebarHome.addEventListener('click', (e) => { e.preventDefault(); showView(homeSection); toggleSidebar(); });
-        sidebarClasses.addEventListener('click', (e) => { e.preventDefault(); alert('Class Rutin page not implemented.'); });
-        sidebarNotices.addEventListener('click', (e) => { e.preventDefault(); alert('Notices page not implemented.'); });
-        sidebarBrightness.addEventListener('click', (e) => { e.preventDefault(); alert('Brightness control not implemented.'); });
-        sidebarPasswordChange.addEventListener('click', (e) => { e.preventDefault(); showView(myAccountSection); toggleSidebar(); });
-        sidebarMyAccount.addEventListener('click', (e) => { e.preventDefault(); showView(myAccountSection); toggleSidebar(); });
-
-        sidebarLogout.addEventListener('click', (e) => {
-            e.preventDefault();
-            currentLoggedInUser = null;
-            showView(loginSection);
-            sidebarToggleIcon.classList.remove('visible'); // Hide hamburger icon on logout
-            toggleSidebar(); // Close sidebar
-            sidebar.style.width = '0'; // Ensure sidebar is truly closed
-            mainContent.classList.remove('sidebar-open'); // Reset main content margin
-        });
-
-        // Menu Dark Mode Toggle (syncs with login toggle)
-        menuDarkModeSwitch.addEventListener('change', function() {
-            applyDarkMode(this.checked);
-        });
-
-        // Account Page Form Submission (Password Change)
-        accountForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const currentPw = currentPasswordInput.value;
-            const newPw = newPasswordInput.value;
-            const confirmNewPw = confirmNewPasswordInput.value;
-
-            // Basic validation
-            if (newPw !== confirmNewPw) {
-                accountErrorMessage.textContent = 'New passwords do not match.';
-                showElement(accountErrorMessage);
-                return;
-            }
-            if (newPw.length < 6) {
-                accountErrorMessage.textContent = 'Password must be at least 6 characters long.';
-                showElement(accountErrorMessage);
-                return;
-            }
-
-            // Simulate password change.
-            alert('Password updated successfully! (Simulated)');
-            accountForm.reset();
-            accountErrorMessage.classList.add('hidden');
-        });
-
-        // Placeholder alerts for unimplemented links
-        document.querySelectorAll('.brightness-control, #sidebar-brightness').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Brightness control is not yet implemented.');
-            });
-        });
-        document.querySelectorAll('.password-change, #sidebar-password-change').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                showView(myAccountSection);
-                toggleSidebar();
-            });
-        });
-
-        document.getElementById('termsLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Terms and Policies content would be displayed here.');
-        });
-    </script>
-</body>
-</html>
+        <div class="panel">
+          <h3>Profile</h3><p class="muted small">Update your personal information.</p>
+          <form id="profileForm">
+            <div class="field"><label for="profileName">Full name</label><input id="profileName" required minlength="2" maxlength="80"></div>
+            <div class="field"><label for="profileEmail">Email</label><input id="profileEmail" type="email"></div>
+            <div id="profileMsg" aria-live="polite"></div>
+            <button class="btn primary full" type="submit">Save Profile</button>
+          </form>
+          <hr style="border:0;border-top:1px solid var(--line);margin:23px 0">
+          <h3>Account Security</h3><p class="muted small">Change your local demo password.</p>
+          <button id="changePassword" class="btn secondary full" type="button">Change Password</button>
+          <bu
