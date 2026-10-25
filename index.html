@@ -1,249 +1,1002 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#4361ee">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Momin's Teaching Home</title>
 <style>
-:root{--bg:#f4f7fc;--card:#fff;--text:#1b2540;--muted:#748099;--line:#e4e9f3;--blue:#4361ee;--soft:#edf1ff;--shadow:0 10px 30px #26375c0b}
-body.dark{--bg:#111827;--card:#1e293b;--text:#f1f5ff;--muted:#aab5ca;--line:#354258;--soft:#293652;--shadow:0 10px 30px #0002}
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);transition:background .25s,color .25s}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #a3b3ff;outline-offset:2px}
-.hidden{display:none!important}
-.muted{color:var(--muted)}
-.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:bold;transition:transform .2s}
-.btn:hover{transform:translateY(-2px)}
-.primary{background:var(--blue);color:white}
-.secondary{background:var(--soft);color:var(--text);border:1px solid var(--line)}
-.danger{background:#ffebeb;color:#b42332}
-body.dark .danger{background:#4a2930;color:#ffc3c3}
-.field{display:grid;gap:7px;margin:15px 0}
-.field label{font-size:14px;font-weight:bold}
-.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--text);min-height:43px}
-.field textarea{resize:vertical}
-.message{padding:11px;border-radius:9px;margin:12px 0;font-size:14px;line-height:1.5}
-.error{background:#ffeded;color:#a32332}
-.success{background:#e3fff0;color:#087443}
-body.dark .error{background:#482b34;color:#ffc0c0}
-body.dark .success{background:#173e31;color:#a7f0c9}
-.auth{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
-.hero{background:linear-gradient(135deg,#2948c7,#5267e8,#805ce5);color:white;padding:clamp(25px,6vw,75px);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
-.hero:after{content:"✦";position:absolute;right:-20px;bottom:-130px;font-size:260px;color:#ffffff15}
-.brand{font-size:19px;font-weight:800;display:flex;align-items:center;gap:12px}
-.logo{width:43px;height:43px;display:grid;place-items:center;background:#ffffff25;border-radius:13px;font-size:24px}
-.hero h1{font-size:clamp(38px,5vw,65px);letter-spacing:-2px;line-height:1.05;margin:55px 0 18px}
-.hero p{line-height:1.8;color:#edf0ff;max-width:460px}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.pills span{padding:9px 12px;border:1px solid #ffffff55;border-radius:30px;font-size:13px}
-.auth-side{display:grid;place-items:center;padding:25px}
-.auth-card{width:min(100%,410px);animation:rise .4s ease}
-.auth-card h2{font-size:31px;margin:0 0 9px}
-.auth-card>p{color:var(--muted);line-height:1.6;margin-bottom:25px}
-.full{width:100%;margin-top:8px}
-.switch{text-align:center;color:var(--muted);font-size:14px;margin-top:20px}
-.textbtn{border:0;background:none;color:var(--blue);font-weight:bold}
-.fine{font-size:12px;color:var(--muted);line-height:1.6;margin-top:20px}
-.app{min-height:100vh;display:grid;grid-template-columns:245px minmax(0,1fr)}
-.sidebar{background:var(--card);border-right:1px solid var(--line);padding:22px 15px;display:flex;flex-direction:column;gap:25px;position:sticky;top:0;height:100vh;overflow:auto;z-index:5}
-.sidebar .brand{font-size:16px;padding:0 7px}
-.sidebar .logo{background:var(--blue);color:white}
-.brand small{display:block;color:var(--muted);font-size:11px;font-weight:normal;margin-top:4px}
-.navlabel{font-size:11px;font-weight:bold;color:var(--muted);letter-spacing:1px;padding:0 12px;margin-bottom:8px}
-.nav{display:grid;gap:5px}
-.nav button{border:0;background:transparent;color:var(--muted);padding:12px;border-radius:10px;text-align:left;font-weight:bold;display:flex;gap:11px;align-items:center}
-.nav button:hover,.nav button.active{background:var(--soft);color:var(--blue)}
-.sidebottom{margin-top:auto}
-.userrow{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:16px 5px;margin-top:15px;min-width:0}
-.avatar{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#4361ee,#9765e8);color:white;display:grid;place-items:center;font-weight:bold;flex-shrink:0}
-.userrow strong{font-size:13px;overflow-wrap:anywhere}
-.userrow small{display:block;color:var(--muted);margin-top:4px}
-.main{padding:27px clamp(15px,3vw,40px);min-width:0}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:27px}
-.topbar h1{margin:0;font-size:clamp(24px,3vw,33px);letter-spacing:-1px}
-.topbar p{margin:7px 0 0;color:var(--muted);font-size:14px}
-.actions{display:flex;gap:8px}
-.iconbtn{border:1px solid var(--line);background:var(--card);color:var(--text);width:42px;height:42px;border-radius:11px;font-size:17px}
-.mobilebrand{display:none}
-.page{display:none;animation:rise .3s ease}
-.page.active{display:block}
-.banner{padding:clamp(24px,4vw,37px);border-radius:21px;color:white;background:linear-gradient(120deg,#3454dc,#7960e5);position:relative;overflow:hidden}
-.banner:after{content:"✦";position:absolute;right:5%;bottom:-45px;font-size:150px;color:#ffffff18}
-.banner h2{font-size:clamp(25px,3vw,38px);margin:0 0 12px;position:relative;z-index:1}
-.banner p{line-height:1.7;max-width:570px;color:#eff0ff;position:relative;z-index:1}
-.banner button{position:relative;z-index:1;background:white;color:#3454dc}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0}
-.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);min-width:0}
-.stat{display:flex;align-items:center;gap:13px}
-.staticon{width:43px;height:43px;border-radius:13px;background:var(--soft);display:grid;place-items:center;font-size:20px}
-.stat strong{font-size:27px;display:block}
-.stat span:last-child{font-size:12px;color:var(--muted)}
-.columns{display:grid;grid-template-columns:1.25fr .75fr;gap:17px}
-.panelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
-.panelhead h3{margin:0;font-size:17px}
-.linkbtn{border:0;background:none;color:var(--blue);font-weight:bold}
-.routineitem{display:grid;grid-template-columns:78px 4px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
-.routineitem:last-child{border-bottom:0}
-.rtime{font-weight:bold;font-size:13px}
-.rline{border-radius:5px;background:var(--blue)}
-.routineitem strong{font-size:14px}
-.routineitem small{display:block;color:var(--muted);margin-top:5px}
-.noticeitem{padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--bg);margin-bottom:10px}
-.noticeitem strong{font-size:14px}
-.noticeitem p{font-size:13px;line-height:1.6;color:var(--muted);margin:7px 0}
-.meta{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
-.heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.heading h2{margin:0;font-size:25px}
-.heading p{color:var(--muted);font-size:14px}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
-table{border-collapse:collapse;width:100%;min-width:650px}
-th,td{text-align:left;padding:14px;border-bottom:1px solid var(--line);font-size:13px}
-th{background:var(--soft);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
-tr:last-child td{border-bottom:0}
-td .btn{padding:7px 9px;font-size:12px;margin:2px}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.badge{display:inline-block;background:var(--soft);color:var(--blue);border-radius:20px;padding:5px 9px;font-size:11px;font-weight:bold;margin-bottom:10px}
-.empty{padding:25px;text-align:center;color:var(--muted);font-size:14px}
-.settingsgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.setting{border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:12px}
-.setting strong{display:block;margin-bottom:7px}
-.setting p{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 12px}
-.setting input[type=range]{width:100%;accent-color:var(--blue)}
-.setting input[type=checkbox]{accent-color:var(--blue);width:17px;height:17px}
-.settingline{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.modalroot{position:fixed;inset:0;background:#10182c88;display:grid;place-items:center;padding:15px;z-index:30}
-.modal{width:min(100%,500px);max-height:90vh;overflow:auto;background:var(--card);border-radius:18px;padding:22px;box-shadow:0 25px 80px #0003;animation:rise .25s ease}
-.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.modalhead h3{margin:0}
-.toast{position:fixed;right:20px;bottom:20px;background:#172033;color:white;padding:13px 18px;border-radius:11px;box-shadow:0 10px 30px #0002;z-index:50;max-width:calc(100% - 40px);animation:rise .25s ease}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:900px){.auth{grid-template-columns:1fr}.hero{display:none}.app{grid-template-columns:1fr}.sidebar{position:fixed;left:-260px;top:0;width:245px;transition:left .25s;box-shadow:var(--shadow)}.sidebar.open{left:0}.mobilebrand{display:flex;align-items:center;gap:8px}.mobilebrand .logo{width:36px;height:36px;font-size:19px}.topbar h1{font-size:24px}.columns{grid-template-columns:1fr}}
-@media(max-width:600px){.main{padding:18px 13px 35px}.stats{grid-template-columns:1fr}.stat{padding:15px}.stat strong{font-size:24px}.cards,.settingsgrid{grid-template-columns:1fr}.topbar{align-items:flex-start}.topbar p{max-width:210px}.top-actions{gap:5px}.iconbtn{width:38px;height:38px}.panel{padding:15px}.banner{padding:22px}.heading h2{font-size:22px}.routineitem{grid-template-columns:67px 4px 1fr;gap:9px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+:root {
+  --bg:#f3f6fc; --panel:#fff; --text:#172033;
+  --muted:#68758a; --primary:#315efb; --border:#e2e8f0;
+  --danger:#dc3545; --shadow:0 8px 30px #1b2b4b0d;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);color:var(--text);transition:.2s;
+}
+body.dark {
+  --bg:#101827;--panel:#1b2638;--text:#f1f5f9;
+  --muted:#a7b3c7;--border:#344157;--shadow:0 8px 30px #0002;
+}
+button,input,select,textarea {font:inherit}
+button {
+  border:0;border-radius:9px;padding:11px 15px;
+  cursor:pointer;background:var(--primary);color:white;
+}
+button:hover {opacity:.88}
+button:disabled {opacity:.5;cursor:not-allowed}
+input,select,textarea {
+  width:100%;padding:12px;border:1px solid var(--border);
+  border-radius:9px;background:var(--panel);color:var(--text);
+}
+label {display:block;font-size:14px;font-weight:600;margin-bottom:7px}
+.field {margin-bottom:15px}
+a {color:var(--primary);cursor:pointer}
+.muted {color:var(--muted)}
+.small {font-size:13px}
+.hidden {display:none!important}
+.card {
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:15px;padding:20px;box-shadow:var(--shadow);
+}
+.auth-wrap {
+  min-height:100vh;display:flex;align-items:center;
+  justify-content:center;padding:20px;
+}
+.auth-card {width:100%;max-width:430px}
+.brand {text-align:center;margin-bottom:25px}
+.brand-icon {
+  display:inline-grid;place-items:center;width:58px;height:58px;
+  background:var(--primary);color:white;border-radius:17px;
+  font-size:25px;font-weight:bold;
+}
+.brand h1 {font-size:25px;margin:14px 0 8px}
+.auth-card h2 {margin-top:0}
+.full {width:100%}
+.switch {text-align:center;margin-top:18px;font-size:14px}
+.notice {
+  background:#eaf0ff;color:#2448bd;padding:12px;
+  border-radius:9px;font-size:13px;line-height:1.5;
+}
+body.dark .notice {background:#25355c;color:#dbe5ff}
+.error {
+  background:#fff0f0;color:#b42318;padding:11px;
+  border-radius:8px;margin-bottom:14px;font-size:14px;
+}
+.success {
+  background:#e8f8ef;color:#17663a;padding:11px;
+  border-radius:8px;margin-bottom:14px;font-size:14px;
+}
+body.dark .error {background:#48252c;color:#ffd8dd}
+body.dark .success {background:#173d30;color:#c5f7db}
+.app-header {
+  background:var(--panel);border-bottom:1px solid var(--border);
+  padding:15px 22px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.header-brand {font-size:19px;font-weight:bold}
+.header-actions {display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.layout {
+  max-width:1200px;margin:auto;padding:22px;
+  display:grid;grid-template-columns:220px minmax(0,1fr);gap:22px;
+}
+.sidebar {align-self:start;position:sticky;top:15px}
+.nav {display:grid;gap:7px}
+.nav button {
+  text-align:left;background:transparent;color:var(--text);
+}
+.nav button.active {background:var(--primary);color:white}
+.main {min-width:0}
+.page-title {margin:0 0 8px;font-size:27px}
+.page-desc {margin:0 0 22px;color:var(--muted)}
+.stats {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:15px;margin-bottom:20px;
+}
+.stat-number {font-size:29px;font-weight:bold;margin-top:9px}
+.section {margin-bottom:22px}
+.section h3 {margin-top:0}
+.toolbar {
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  margin-bottom:15px;
+}
+.toolbar input,.toolbar select {flex:1;min-width:130px}
+.toolbar button {white-space:nowrap}
+.table-wrap {overflow-x:auto}
+table {border-collapse:collapse;width:100%;min-width:550px}
+th,td {
+  padding:12px;text-align:left;border-bottom:1px solid var(--border);
+  font-size:14px;vertical-align:top;
+}
+th {color:var(--muted);font-weight:600}
+.actions {display:flex;gap:7px;flex-wrap:wrap}
+.btn-secondary {background:#64748b}
+.btn-danger {background:var(--danger)}
+.btn-light {background:var(--border);color:var(--text)}
+.empty {text-align:center;color:var(--muted);padding:25px}
+.notice-item {border-bottom:1px solid var(--border);padding:15px 0}
+.notice-item:last-child {border-bottom:0}
+.notice-item h4 {margin:0 0 8px}
+.notice-item p {white-space:pre-wrap;overflow-wrap:anywhere}
+.setting-row {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;padding:15px 0;border-bottom:1px solid var(--border);
+}
+.setting-row input[type=checkbox] {width:20px;height:20px}
+.setting-row input[type=range] {max-width:180px}
+#toast {
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  padding:13px 18px;background:#172033;color:white;border-radius:10px;
+  box-shadow:var(--shadow);z-index:10;max-width:90%;text-align:center;
+}
+@media(max-width:760px) {
+  .layout {grid-template-columns:1fr;padding:14px;gap:15px}
+  .sidebar {position:static}
+  .nav {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav button {font-size:13px;padding:10px}
+  .stats {grid-template-columns:1fr}
+  .stat-number {font-size:24px}
+  .app-header {padding:14px}
+  .page-title {font-size:24px}
+}
 </style>
 </head>
 <body>
-<div id="auth" class="auth">
-  <section class="hero">
-    <div class="brand"><div class="logo">✦</div><div>Momin's Teaching Home</div></div>
-    <div>
-      <div class="badge" style="background:#ffffff22;color:white">YOUR LEARNING SPACE</div>
-      <h1>Learn today.<br>Lead tomorrow.</h1>
-      <p>A friendly place to organize your classes, stay updated with announcements, and make every learning day count.</p>
-      <div class="pills"><span>📚 Class Routine</span><span>📢 Notices</span><span>⚙️ Personal Settings</span></div>
+
+<!-- Authentication -->
+<section id="authView" class="auth-wrap">
+  <div class="card auth-card">
+    <div class="brand">
+      <div class="brand-icon">M</div>
+      <h1>Momin's Teaching Home</h1>
+      <p class="muted">Your learning community</p>
     </div>
-    <p class="small">A simple learning dashboard for your everyday progress.</p>
-  </section>
-  <section class="auth-side">
-    <div class="auth-card">
-      <div class="brand"><div class="logo" style="background:var(--blue);color:white">✦</div><div>Momin's Teaching Home</div></div>
-      <div id="loginBox">
-        <h2 style="margin-top:28px">Welcome back</h2>
-        <p>Sign in to continue to your learning dashboard.</p>
-        <form id="loginForm">
-          <div class="field"><label for="loginUser">Username</label><input id="loginUser" autocomplete="username" required placeholder="Enter your username"></div>
-          <div class="field"><label for="loginPass">Password</label><input id="loginPass" type="password" autocomplete="current-password" required placeholder="Enter your password"></div>
-          <label class="checkrow"><input id="rememberLogin" type="checkbox"> Remember me on this device</label>
-          <div id="loginMsg" aria-live="polite"></div>
-          <button class="btn primary full" type="submit">Sign In</button>
-        </form>
-        <div class="switch">Don't have an account? <button class="textbtn" id="toRegister" type="button">Create account</button></div>
-      </div>
-      <div id="registerBox" class="hidden">
-        <h2 style="margin-top:28px">Create your account</h2>
-        <p>Join your learning space in a few simple steps.</p>
-        <form id="registerForm">
-          <div class="field"><label for="regName">Full name</label><input id="regName" required minlength="2" maxlength="80" placeholder="Your full name"></div>
-          <div class="field"><label for="regUser">Username</label><input id="regUser" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_.-]+" autocomplete="username" placeholder="3–24 letters, numbers, . _ -"></div>
-          <div class="field"><label for="regEmail">Email (optional)</label><input id="regEmail" type="email" placeholder="you@example.com"></div>
-          <div class="field"><label for="regPass">Password</label><input id="regPass" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></div>
-          <div class="field"><label for="regConfirm">Confirm password</label><input id="regConfirm" type="password" required minlength="8" autocomplete="new-password" placeholder="Enter password again"></div>
-          <label class="checkrow"><input id="acceptLocal" type="checkbox" required> I understand this demo saves account data in this browser.</label>
-          <div id="registerMsg" aria-live="polite"></div>
-          <button class="btn primary full" type="submit">Create Account</button>
-        </form>
-        <div class="switch">Already registered? <button class="textbtn" id="toLogin" type="button">Sign in</button></div>
-      </div>
-      <p class="fine">Demo notice: this is a browser-only website. Account data is stored locally on this device, not on a secure server. Do not use a real or sensitive password.</p>
-    </div>
-  </section>
-</div>
 
-<div id="app" class="app hidden">
-  <aside id="sidebar" class="sidebar">
-    <div class="brand"><div class="logo">✦</div><div class="brand-name">Momin's Teaching Home<small>Learning Dashboard</small></div></div>
-    <div>
-      <div class="navlabel">WORKSPACE</div>
-      <nav class="nav">
-        <button class="active" data-page="dashboard"><span>▦</span> Dashboard</button>
-        <button data-page="routine"><span>▤</span> Class Routine</button>
-        <button data-page="notices"><span>♧</span> Notices</button>
-        <button data-page="settings"><span>⚙</span> Settings</button>
-      </nav>
-    </div>
-    <div class="sidebottom">
-      <button id="sideTheme" class="btn secondary full" type="button">☾ Toggle Appearance</button>
-      <div class="userrow"><div class="avatar" id="sideAvatar">M</div><div style="min-width:0"><strong id="sideName">Student</strong><small id="sideUsername">@student</small></div></div>
-      <button id="logout" class="btn secondary full" type="button">Sign Out</button>
-    </div>
-  </aside>
-  <main class="main">
-    <header class="topbar">
-      <div style="display:flex;align-items:center;gap:12px;min-width:0">
-        <button id="menuBtn" class="iconbtn" type="button" aria-label="Open menu">☰</button>
-        <div class="mobilebrand"><div class="logo">✦</div></div>
-        <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Your learning space at a glance.</p></div>
-      </div>
-      <div class="actions"><button id="themeBtn" class="iconbtn" type="button" aria-label="Toggle theme">☾</button><button id="settingsBtn" class="iconbtn" type="button" aria-label="Open settings">⚙</button></div>
-    </header>
-
-    <section id="page-dashboard" class="page active">
-      <div class="banner"><div class="badge" style="background:#ffffff22;color:white">YOUR PERSONAL SPACE</div><h2 id="welcome">Welcome back!</h2><p>Keep your learning organized, check your upcoming classes, and stay informed about the latest notices.</p><button id="viewRoutine" class="btn" type="button">View Class Routine →</button></div>
-      <div class="stats">
-        <div class="stat"><div class="staticon">📚</div><div><strong id="statClasses">0</strong><span>Scheduled classes</span></div></div>
-        <div class="stat"><div class="staticon">📢</div><div><strong id="statNotices">0</strong><span>Published notices</span></div></div>
-        <div class="stat"><div class="staticon">✓</div><div><strong id="statDays">7</strong><span>Days to stay on track</span></div></div>
-      </div>
-      <div class="columns">
-        <div class="panel"><div class="panelhead"><h3>Upcoming Classes</h3><button class="linkbtn" data-goto="routine" type="button">View all</button></div><div id="upcoming"></div></div>
-        <div class="panel"><div class="panelhead"><h3>Latest Notices</h3><button class="linkbtn" data-goto="notices" type="button">View all</button></div><div id="latestNotices"></div></div>
-      </div>
-    </section>
-
-    <section id="page-routine" class="page">
-      <div class="heading"><div><h2>Class Routine</h2><p class="muted">Manage your weekly learning schedule.</p></div><button id="addClass" class="btn primary" type="button">＋ Add Class</button></div>
-      <div class="panel" style="margin-bottom:16px"><div class="field" style="max-width:260px;margin:0"><label for="dayFilter">Filter by day</label><select id="dayFilter"><option value="All">All days</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div></div>
-      <div class="tablewrap"><table><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Teacher</th><th>Room / Link</th><th>Actions</th></tr></thead><tbody id="routineBody"></tbody></table></div>
-      <p class="muted small">Your routine is saved in this browser. Changes are not shared with other visitors.</p>
-    </section>
-
-    <section id="page-notices" class="page">
-      <div class="heading"><div><h2>Notices & Announcements</h2><p class="muted">Important updates for your learning space.</p></div><button id="addNotice" class="btn primary" type="button">＋ Add Notice</button></div>
-      <div id="noticeGrid" class="cards"></div>
-    </section>
-
-    <section id="page-settings" class="page">
-      <div class="heading"><div><h2>Settings</h2><p class="muted">Customize your experience and account.</p></div></div>
-      <div class="settingsgrid">
-        <div class="panel">
-          <h3>Appearance</h3><p class="muted small">Choose how your dashboard looks.</p>
-          <div class="setting"><div class="settingline"><strong>Dark mode</strong><input id="darkMode" type="checkbox" aria-label="Dark mode"></div><p>Switch between light and dark themes.</p></div>
-          <div class="setting"><div class="settingline"><strong>Brightness</strong><span id="brightLabel" class="muted small">100%</span></div><input id="brightness" type="range" min="70" max="120" value="100" aria-label="Brightness"><p>Adjust the brightness of the page.</p></div>
-          <div class="setting"><div class="settingline"><strong>Animations</strong><input id="animations" type="checkbox" checked aria-label="Animations"></div><p>Enable or reduce interface animations.</p></div>
-          <div class="setting"><div class="settingline"><strong>Remember sign-in</strong><input id="rememberSetting" type="checkbox" aria-label="Remember sign-in"></div><p>Keep your sign-in active on this browser.</p></div>
+    <div id="loginPanel">
+      <h2>Welcome Back</h2>
+      <p class="muted">Sign in to continue to your home.</p>
+      <div id="loginMessage" aria-live="polite"></div>
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginUser">Username or Email</label>
+          <input id="loginUser" autocomplete="username" required>
         </div>
-        <div class="panel">
-          <h3>Profile</h3><p class="muted small">Update your personal information.</p>
-          <form id="profileForm">
-            <div class="field"><label for="profileName">Full name</label><input id="profileName" required minlength="2" maxlength="80"></div>
-            <div class="field"><label for="profileEmail">Email</label><input id="profileEmail" type="email"></div>
-            <div id="profileMsg" aria-live="polite"></div>
-            <button class="btn primary full" type="submit">Save Profile</button>
+        <div class="field">
+          <label for="loginPass">Password</label>
+          <input id="loginPass" type="password"
+                 autocomplete="current-password" required>
+        </div>
+        <button class="full" type="submit">Log In</button>
+      </form>
+      <p class="switch">New here? <a id="showSignup">Create an account</a></p>
+    </div>
+
+    <div id="signupPanel" class="hidden">
+      <h2>Create Account</h2>
+      <p class="muted">Join Momin's Teaching Home.</p>
+      <div id="signupMessage" aria-live="polite"></div>
+      <form id="registerForm">
+        <div class="field">
+          <label for="regName">Full Name</label>
+          <input id="regName" autocomplete="name" maxlength="80" required>
+        </div>
+        <div class="field">
+          <label for="regUser">Username</label>
+          <input id="regUser" autocomplete="username"
+                 minlength="3" maxlength="24"
+                 pattern="[A-Za-z0-9_.-]{3,24}"
+                 title="Use 3–24 letters, numbers, dots, underscores or hyphens."
+                 required>
+        </div>
+        <div class="field">
+          <label for="regEmail">Email (Optional)</label>
+          <input id="regEmail" type="email" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="regPass">Password</label>
+          <input id="regPass" type="password" autocomplete="new-password"
+                 minlength="8" required>
+        </div>
+        <div class="field">
+          <label for="regConfirm">Confirm Password</label>
+          <input id="regConfirm" type="password"
+                 autocomplete="new-password" minlength="8" required>
+        </div>
+        <label style="display:flex;gap:9px;align-items:flex-start;
+                      margin-bottom:16px;font-weight:normal">
+          <input id="acceptLocal" type="checkbox"
+                 style="width:18px;height:18px;flex-shrink:0" required>
+          <span class="small">I understand this demo stores account data
+          in this browser and is not a secure server account.</span>
+        </label>
+        <button class="full" type="submit">Sign Up</button>
+      </form>
+      <p class="switch">Already have an account?
+        <a id="showLogin">Log in</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Main application -->
+<section id="appView" class="hidden">
+  <header class="app-header">
+    <div class="header-brand">Momin's Teaching Home</div>
+    <div class="header-actions">
+      <span id="headerUser" class="small"></span>
+      <button type="button" class="btn-secondary" id="logoutBtn">Log Out</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="card sidebar">
+      <nav class="nav" aria-label="Main navigation">
+        <button type="button" class="active" data-page="dashboard">Dashboard</button>
+        <button type="button" data-page="routine">Class Routine</button>
+        <button type="button" data-page="notices">Notices</button>
+        <button type="button" data-page="settings">Settings</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <div id="dashboardPage" class="page">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-desc">Welcome to your learning home.</p>
+        <div class="stats">
+          <div class="card">
+            <div class="muted">Scheduled Classes</div>
+            <div class="stat-number" id="statClasses">0</div>
+          </div>
+          <div class="card">
+            <div class="muted">Published Notices</div>
+            <div class="stat-number" id="statNotices">0</div>
+          </div>
+          <div class="card">
+            <div class="muted">Your Account</div>
+            <div class="stat-number" style="font-size:20px">Active</div>
+          </div>
+        </div>
+        <div class="card section">
+          <h3>Class Routine</h3>
+          <div id="dashboardRoutine"></div>
+          <button type="button" data-go="routine">Manage Routine</button>
+        </div>
+        <div class="card section">
+          <h3>Latest Notices</h3>
+          <div id="dashboardNotices"></div>
+          <button type="button" data-go="notices">View All Notices</button>
+        </div>
+      </div>
+
+      <div id="routinePage" class="page hidden">
+        <h2 class="page-title">Class Routine</h2>
+        <p class="page-desc">Organize your weekly classes.</p>
+        <div class="card">
+          <form id="routineForm">
+            <input type="hidden" id="routineId">
+            <div class="field">
+              <label for="className">Class or Subject</label>
+              <input id="className" maxlength="100" required>
+            </div>
+            <div class="field">
+              <label for="classDay">Day</label>
+              <select id="classDay" required>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="classTime">Time</label>
+              <input id="classTime" type="time" required>
+            </div>
+            <div class="field">
+              <label for="classTeacher">Teacher (Optional)</label>
+              <input id="classTeacher" maxlength="100">
+            </div>
+            <div class="toolbar">
+              <button type="submit" id="routineSubmit">Add Class</button>
+              <button type="button" class="btn-secondary hidden"
+                      id="routineCancel">Cancel Edit</button>
+            </div>
           </form>
-          <hr style="border:0;border-top:1px solid var(--line);margin:23px 0">
-          <h3>Account Security</h3><p class="muted small">Change your local demo password.</p>
-          <button id="changePassword" class="btn secondary full" type="button">Change Password</button>
-          <bu
+        </div>
+        <div class="card section">
+          <div class="toolbar">
+            <select id="routineFilter" aria-label="Filter by day">
+              <option value="All">All Days</option>
+              <option>Saturday</option><option>Sunday</option>
+              <option>Monday</option><option>Tuesday</option>
+              <option>Wednesday</option><option>Thursday</option>
+              <option>Friday</option>
+            </select>
+          </div>
+          <div id="routineList"></div>
+        </div>
+      </div>
+
+      <div id="noticesPage" class="page hidden">
+        <h2 class="page-title">Notices</h2>
+        <p class="page-desc">Create and manage announcements.</p>
+        <div class="card">
+          <form id="noticeForm">
+            <input type="hidden" id="noticeId">
+            <div class="field">
+              <label for="noticeTitle">Notice Title</label>
+              <input id="noticeTitle" maxlength="150" required>
+            </div>
+            <div class="field">
+              <label for="noticeBody">Notice Details</label>
+              <textarea id="noticeBody" rows="4" maxlength="5000"
+                        required></textarea>
+            </div>
+            <div class="toolbar">
+              <button type="submit" id="noticeSubmit">Publish Notice</button>
+              <button type="button" class="btn-secondary hidden"
+                      id="noticeCancel">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+        <div class="card section">
+          <h3>All Notices</h3>
+          <div id="noticeList"></div>
+        </div>
+      </div>
+
+      <div id="settingsPage" class="page hidden">
+        <h2 class="page-title">Settings</h2>
+        <p class="page-desc">Personalize your experience.</p>
+        <div class="card section">
+          <h3>Appearance</h3>
+          <div class="setting-row">
+            <div><strong>Dark Mode</strong><div class="muted small">Use a darker theme.</div></div>
+            <input id="darkMode" type="checkbox" aria-label="Dark Mode">
+          </div>
+          <div class="setting-row">
+            <div><strong>Animations</strong><div class="muted small">Enable interface transitions.</div></div>
+            <input id="motionMode" type="checkbox" aria-label="Animations">
+          </div>
+          <div class="setting-row">
+            <div><strong>Brightness</strong><div class="muted small">Adjust page brightness.</div></div>
+            <input id="brightness" type="range" min="70" max="120" value="100"
+                   aria-label="Brightness">
+          </div>
+        </div>
+        <div class="card section">
+          <h3>Profile</h3>
+          <form id="profileForm">
+            <div class="field">
+              <label for="profileName">Full Name</label>
+              <input id="profileName" maxlength="80" required>
+            </div>
+            <div class="field">
+              <label for="profileEmail">Email</label>
+              <input id="profileEmail" type="email">
+            </div>
+            <button type="submit">Save Profile</button>
+          </form>
+        </div>
+        <div class="card section">
+          <h3>Change Password</h3>
+          <form id="passwordForm">
+            <div class="field">
+              <label for="oldPassword">Current Password</label>
+              <input id="oldPassword" type="password" required>
+            </div>
+            <div class="field">
+              <label for="newPassword">New Password (At least 8 characters)</label>
+              <input id="newPassword" type="password" minlength="8" required>
+            </div>
+            <div class="field">
+              <label for="confirmNewPassword">Confirm New Password</label>
+              <input id="confirmNewPassword" type="password" minlength="8" required>
+            </div>
+            <button type="submit">Update Password</button>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Data & Privacy</h3>
+          <p class="muted small">This demo stores data in your browser. It does not
+          provide server authentication, secure password storage, or shared data
+          between different devices.</p>
+          <button type="button" class="btn-danger" id="clearDataBtn">
+            Delete My Local Account
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</section>
+
+<div id="toast" class="hidden" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  const KEYS = {
+    users: "mth_users_v1",
+    session: "mth_session_v1",
+    routine: "mth_routine_v1",
+    notices: "mth_notices_v1",
+    settings: "mth_settings_v1"
+  };
+
+  const $ = id => document.getElementById(id);
+  let currentUser = null;
+  let toastTimer = null;
+
+  function readJSON(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value === null ? fallback : JSON.parse(value);
+    } catch (error) {
+      console.error("Storage read error:", error);
+      return fallback;
+    }
+  }
+
+  function saveJSON(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (error) {
+      console.error("Storage write error:", error);
+      showToast("Could not save data. Check your browser storage settings.");
+      return false;
+    }
+  }
+
+  function users() {
+    const result = readJSON(KEYS.users, []);
+    return Array.isArray(result) ? result : [];
+  }
+
+  function userKey() {
+    return currentUser ? currentUser.username.toLowerCase() : "";
+  }
+
+  function userDataKey(base) {
+    return base + "_" + userKey();
+  }
+
+  function getRoutine() {
+    const result = readJSON(userDataKey(KEYS.routine), []);
+    return Array.isArray(result) ? result : [];
+  }
+
+  function saveRoutine(items) {
+    return saveJSON(userDataKey(KEYS.routine), items);
+  }
+
+  function getNotices() {
+    const result = readJSON(userDataKey(KEYS.notices), []);
+    return Array.isArray(result) ? result : [];
+  }
+
+  function saveNotices(items) {
+    return saveJSON(userDataKey(KEYS.notices), items);
+  }
+
+  function getSettings() {
+    return readJSON(userDataKey(KEYS.settings), {
+      dark: false, motion: true, brightness: 100
+    });
+  }
+
+  function showToast(message) {
+    $("toast").textContent = message;
+    $("toast").classList.remove("hidden");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $("toast").classList.add("hidden"), 3000);
+  }
+
+  function showMessage(id, message, type) {
+    const box = $(id);
+    box.className = type || "error";
+    box.textContent = message;
+  }
+
+  function clearMessage(id) {
+    $(id).className = "";
+    $(id).textContent = "";
+  }
+
+  function showAuth(mode) {
+    $("authView").classList.remove("hidden");
+    $("appView").classList.add("hidden");
+    $("loginPanel").classList.toggle("hidden", mode !== "login");
+    $("signupPanel").classList.toggle("hidden", mode !== "signup");
+    clearMessage("loginMessage");
+    clearMessage("signupMessage");
+  }
+
+  function showApp() {
+    $("authView").classList.add("hidden");
+    $("appView").classList.remove("hidden");
+    $("headerUser").textContent = currentUser.name;
+    $("profileName").value = currentUser.name || "";
+    $("profileEmail").value = currentUser.email || "";
+    applySettings();
+    renderAll();
+    goPage("dashboard");
+  }
+
+  function applySettings() {
+    const s = getSettings();
+    document.body.classList.toggle("dark", !!s.dark);
+    $("darkMode").checked = !!s.dark;
+    $("motionMode").checked = s.motion !== false;
+    $("brightness").value = Number(s.brightness) || 100;
+    document.documentElement.style.filter =
+      "brightness(" + ($("brightness").value / 100) + ")";
+    document.documentElement.style.scrollBehavior =
+      s.motion === false ? "auto" : "smooth";
+  }
+
+  function updateSettings(partial) {
+    const s = Object.assign({}, getSettings(), partial);
+    if (saveJSON(userDataKey(KEYS.settings), s)) applySettings();
+  }
+
+  function goPage(name) {
+    document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
+    const page = $(name + "Page");
+    if (page) page.classList.remove("hidden");
+    document.querySelectorAll("[data-page]").forEach(button => {
+      button.classList.toggle("active", button.dataset.page === name);
+    });
+  }
+
+  function escapeHTML(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    }[char]));
+  }
+
+  function sortRoutine(items) {
+    const days = ["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
+    return items.slice().sort((a,b) =>
+      days.indexOf(a.day) - days.indexOf(b.day) ||
+      a.time.localeCompare(b.time)
+    );
+  }
+
+  function renderRoutine(target, items, showActions) {
+    if (!items.length) {
+      $(target).innerHTML = '<div class="empty">No classes added yet.</div>';
+      return;
+    }
+
+    let html = '<div class="table-wrap"><table><thead><tr>' +
+      '<th>Class</th><th>Day</th><th>Time</th><th>Teacher</th>' +
+      (showActions ? '<th>Actions</th>' : '') +
+      '</tr></thead><tbody>';
+
+    sortRoutine(items).forEach(item => {
+      html += '<tr><td>' + escapeHTML(item.name) + '</td>' +
+        '<td>' + escapeHTML(item.day) + '</td>' +
+        '<td>' + escapeHTML(item.time) + '</td>' +
+        '<td>' + escapeHTML(item.teacher || "—") + '</td>';
+
+      if (showActions) {
+        html += '<td><div class="actions">' +
+          '<button type="button" class="btn-secondary" data-edit-class="' +
+          escapeHTML(item.id) + '">Edit</button>' +
+          '<button type="button" class="btn-danger" data-delete-class="' +
+          escapeHTML(item.id) + '">Delete</button></div></td>';
+      }
+      html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    $(target).innerHTML = html;
+  }
+
+  function renderNotices(target, items, showActions) {
+    if (!items.length) {
+      $(target).innerHTML = '<div class="empty">No notices published yet.</div>';
+      return;
+    }
+
+    const sorted = items.slice().sort((a,b) => b.created - a.created);
+    $(target).innerHTML = sorted.map(item =>
+      '<article class="notice-item"><h4>' + escapeHTML(item.title) +
+      '</h4><div class="muted small">' +
+      escapeHTML(new Date(item.created).toLocaleString()) +
+      '</div><p>' + escapeHTML(item.body) + '</p>' +
+      (showActions ? '<div class="actions">' +
+        '<button type="button" class="btn-secondary" data-edit-notice="' +
+        escapeHTML(item.id) + '">Edit</button>' +
+        '<button type="button" class="btn-danger" data-delete-notice="' +
+        escapeHTML(item.id) + '">Delete</button></div>' : '') +
+      '</article>'
+    ).join("");
+  }
+
+  function renderAll() {
+    const routine = getRoutine();
+    const notices = getNotices();
+    $("statClasses").textContent = routine.length;
+    $("statNotices").textContent = notices.length;
+
+    renderRoutine("dashboardRoutine", routine.slice(0,5), false);
+    renderNotices("dashboardNotices",
+      notices.slice().sort((a,b) => b.created - a.created).slice(0,3), false);
+
+    const filter = $("routineFilter").value;
+    renderRoutine("routineList",
+      filter === "All" ? routine : routine.filter(item => item.day === filter), true);
+    renderNotices("noticeList", notices, true);
+  }
+
+  // FIX: Attach submit listeners directly and prevent normal form navigation.
+  $("showSignup").addEventListener("click", () => showAuth("signup"));
+  $("showLogin").addEventListener("click", () => showAuth("login"));
+
+  $("registerForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    clearMessage("signupMessage");
+
+    const name = $("regName").value.trim();
+    const username = $("regUser").value.trim();
+    const email = $("regEmail").value.trim();
+    const password = $("regPass").value;
+    const confirm = $("regConfirm").value;
+
+    if (name.length < 2) {
+      showMessage("signupMessage", "Please enter your full name.");
+      return;
+    }
+
+    if (!/^[A-Za-z0-9_.-]{3,24}$/.test(username)) {
+      showMessage("signupMessage",
+        "Username must contain 3–24 letters, numbers, dots, underscores or hyphens.");
+      return;
+    }
+
+    if (password.length < 8) {
+      showMessage("signupMessage", "Password must be at least 8 characters.");
+      return;
+    }
+
+    if (password !== confirm) {
+      showMessage("signupMessage", "Passwords do not match.");
+      return;
+    }
+
+    if (!$("acceptLocal").checked) {
+      showMessage("signupMessage", "Please accept the local demo notice.");
+      return;
+    }
+
+    const list = users();
+    const normalized = username.toLowerCase();
+
+    if (list.some(user => user.username.toLowerCase() === normalized)) {
+      showMessage("signupMessage", "This username is already registered.");
+      return;
+    }
+
+    if (email && list.some(user =>
+      user.email && user.email.toLowerCase() === email.toLowerCase()
+    )) {
+      showMessage("signupMessage", "This email is already registered.");
+      return;
+    }
+
+    // Demo only: passwords are stored locally, not securely hashed.
+    const newUser = {
+      name, username, email, password,
+      created: Date.now()
+    };
+
+    if (!saveJSON(KEYS.users, list.concat(newUser))) {
+      showMessage("signupMessage", "Account could not be saved in this browser.");
+      return;
+    }
+
+    currentUser = newUser;
+    showApp();
+    showToast("Account created successfully. Welcome!");
+  });
+
+  $("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    clearMessage("loginMessage");
+
+    const identifier = $("loginUser").value.trim().toLowerCase();
+    const password = $("loginPass").value;
+    const user = users().find(item =>
+      (item.username.toLowerCase() === identifier ||
+       (item.email && item.email.toLowerCase() === identifier)) &&
+      item.password === password
+    );
+
+    if (!user) {
+      showMessage("loginMessage", "Incorrect username/email or password.");
+      return;
+    }
+
+    currentUser = user;
+    showApp();
+    showToast("Login successful.");
+  });
+
+  $("logoutBtn").addEventListener("click", function () {
+    currentUser = null;
+    showAuth("login");
+    $("loginPass").value = "";
+    showToast("You have logged out.");
+  });
+
+  document.querySelectorAll("[data-page]").forEach(button => {
+    button.addEventListener("click", () => goPage(button.dataset.page));
+  });
+
+  document.querySelectorAll("[data-go]").forEach(button => {
+    button.addEventListener("click", () => goPage(button.dataset.go));
+  });
+
+  $("routineFilter").addEventListener("change", renderAll);
+
+  function resetRoutineForm() {
+    $("routineForm").reset();
+    $("routineId").value = "";
+    $("routineSubmit").textContent = "Add Class";
+    $("routineCancel").classList.add("hidden");
+  }
+
+  $("routineCancel").addEventListener("click", resetRoutineForm);
+
+  $("routineForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const id = $("routineId").value;
+    const items = getRoutine();
+    const item = {
+      id: id || String(Date.now()) + Math.random().toString(16).slice(2),
+      name: $("className").value.trim(),
+      day: $("classDay").value,
+      time: $("classTime").value,
+      teacher: $("classTeacher").value.trim()
+    };
+
+    if (!item.name || !item.time) {
+      showToast("Please complete the required fields.");
+      return;
+    }
+
+    const updated = id
+      ? items.map(old => old.id === id ? item : old)
+      : items.concat(item);
+
+    if (saveRoutine(updated)) {
+      resetRoutineForm();
+      renderAll();
+      showToast(id ? "Class updated." : "Class added.");
+    }
+  });
+
+  $("routineList").addEventListener("click", function (event) {
+    const edit = event.target.closest("[data-edit-class]");
+    const remove = event.target.closest("[data-delete-class]");
+
+    if (edit) {
+      const item = getRoutine().find(row => row.id === edit.dataset.editClass);
+      if (!item) return;
+      $("routineId").value = item.id;
+      $("className").value = item.name;
+      $("classDay").value = item.day;
+      $("classTime").value = item.time;
+      $("classTeacher").value = item.teacher || "";
+      $("routineSubmit").textContent = "Save Changes";
+      $("routineCancel").classList.remove("hidden");
+      $("routineForm").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    if (remove) {
+      const item = getRoutine().find(row => row.id === remove.dataset.deleteClass);
+      if (!item || !confirm('Delete class "' + item.name + '"?')) return;
+      if (saveRoutine(getRoutine().filter(row => row.id !== item.id))) {
+        renderAll();
+        showToast("Class deleted.");
+      }
+    }
+  });
+
+  function resetNoticeForm() {
+    $("noticeForm").reset();
+    $("noticeId").value = "";
+    $("noticeSubmit").textContent = "Publish Notice";
+    $("noticeCancel").classList.add("hidden");
+  }
+
+  $("noticeCancel").addEventListener("click", resetNoticeForm);
+
+  $("noticeForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const id = $("noticeId").value;
+    const items = getNotices();
+    const old = items.find(item => item.id === id);
+    const item = {
+      id: id || String(Date.now()) + Math.random().toString(16).slice(2),
+      title: $("noticeTitle").value.trim(),
+      body: $("noticeBody").value.trim(),
+      created: old ? old.created : Date.now()
+    };
+
+    if (!item.title || !item.body) {
+      showToast("Please enter a title and notice details.");
+      return;
+    }
+
+    const updated = id
+      ? items.map(row => row.id === id ? item : row)
+      : items.concat(item);
+
+    if (saveNotices(updated)) {
+      resetNoticeForm();
+      renderAll();
+      showToast(id ? "Notice updated." : "Notice published.");
+    }
+  });
+
+  $("noticeList").addEventListener("click", function (event) {
+    const edit = event.target.closest("[data-edit-notice]");
+    const remove = event.target.closest("[data-delete-notice]");
+
+    if (edit) {
+      const item = getNotices().find(row => row.id === edit.dataset.editNotice);
+      if (!item) return;
+      $("noticeId").value = item.id;
+      $("noticeTitle").value = item.title;
+      $("noticeBody").value = item.body;
+      $("noticeSubmit").textContent = "Save Changes";
+      $("noticeCancel").classList.remove("hidden");
+      $("noticeForm").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    if (remove) {
+      const item = getNotices().find(row => row.id === remove.dataset.deleteNotice);
+      if (!item || !confirm('Delete notice "' + item.title + '"?')) return;
+      if (saveNotices(getNotices().filter(row => row.id !== item.id))) {
+        renderAll();
+        showToast("Notice deleted.");
+      }
+    }
+  });
+
+  $("darkMode").addEventListener("change", event =>
+    updateSettings({dark:event.target.checked})
+  );
+  $("motionMode").addEventListener("change", event =>
+    updateSettings({motion:event.target.checked})
+  );
+  $("brightness").addEventListener("input", event => {
+    document.documentElement.style.filter =
+      "brightness(" + (Number(event.target.value) / 100) + ")";
+  });
+  $("brightness").addEventListener("change", event =>
+    updateSettings({brightness:Number(event.target.value)})
+  );
+
+  $("profileForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const name = $("profileName").value.trim();
+    const email = $("profileEmail").value.trim();
+
+    if (name.length < 2) {
+      showToast("Please enter your full name.");
+      return;
+    }
+
+    const list = users().map(user =>
+      user.username.toLowerCase() === userKey()
+        ? Object.assign({}, user, {name, email})
+        : user
+    );
+
+    if (saveJSON(KEYS.users, list)) {
+      currentUser.name = name;
+      currentUser.email = email;
+      $("headerUser").textContent = name;
+      showToast("Profile updated.");
+    }
+  });
+
+  $("passwordForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const oldPass = $("oldPassword").value;
+    const newPass = $("newPassword").value;
+    const confirmPass = $("confirmNewPassword").value;
+
+    if (oldPass !== currentUser.password) {
+      showToast("Current password is incorrect.");
+      return;
+    }
+    if (newPass.length < 8) {
+      showToast("New password must be at least 8 characters.");
+      return;
+    }
+    if (newPass !== confirmPass) {
+      showToast("New passwords do not match.");
+      return;
+    }
+
+    const list = users().map(user =>
+      user.username.toLowerCase() === userKey()
+        ? Object.assign({}, user, {password:newPass})
+        : user
+    );
+
+    if (saveJSON(KEYS.users, list)) {
+      currentUser.password = newPass;
+      $("passwordForm").reset();
+      showToast("Password updated.");
+    }
+  });
+
+  $("clearDataBtn").addEventListener("click", function () {
+    if (!confirm("Delete your local account and all its routine, notices and settings? This cannot be undone.")) return;
+
+    const username = userKey();
+    const list = users().filter(user =>
+      user.username.toLowerCase() !== username
+    );
+
+    if (!saveJSON(KEYS.users, list)) return;
+
+    [KEYS.routine, KEYS.notices, KEYS.settings].forEach(key => {
+      localStorage.removeItem(key + "_" + username);
+    });
+
+    currentUser = null;
+    showAuth("signup");
+    showToast("Local account deleted.");
+  });
+
+  // Restore an account only for this browser session.
+  function init() {
+    try {
+      const sessionUser = sessionStorage.getItem(KEYS.session);
+      if (sessionUser) {
+        const user = users().find(item =>
+          item.username.toLowerCase() === sessionUser.toLowerCase()
+        );
+        if (user) {
+          currentUser = user;
+          showApp();
+          return;
+        }
+      }
+    } catch (error) {
+      console.warn("Session storage unavailable:", error);
+    }
+    showAuth("login");
+  }
+
+  // Remember the active account only until this tab/browser session ends.
+  const originalShowApp = showApp;
+  showApp = function () {
+    try {
+      if (currentUser) sessionStorage.setItem(KEYS.session, currentUser.username);
+    } catch (error) {
+      console.warn("Could not save session:", error);
+    }
+    originalShowApp();
+  };
+
+  init();
+
+})();
+</script>
+</body>
+</html>
