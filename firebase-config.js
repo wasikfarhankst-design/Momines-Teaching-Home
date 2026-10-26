@@ -1,5 +1,5 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+windows.firebaseConfig = {
   apiKey: "AIzaSyC-YwsusvAFfBn896wR-1nZfNAZlDlfNs8",
   authDomain: "momines-teaching-home-99692.firebaseapp.com",
   projectId: "momines-teaching-home-99692",
