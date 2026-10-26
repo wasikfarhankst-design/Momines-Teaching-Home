@@ -1,1 +1,200 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Momin's Teaching Home | Admin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 24px;
+      color: #172033;
+    }
+    main {
+      max-width: 650px;
+      margin: 35px auto;
+    }
+    section {
+      background: white;
+      padding: 24px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      box-shadow: 0 3px 14px #00000010;
+    }
+    h1, h2 { color: #1746a2; }
+    input, textarea, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+    }
+    input, textarea { border: 1px solid #cbd5e1; }
+    button {
+      border: 0;
+      background: #1746a2;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #panel { display: none; }
+    #status { white-space: pre-wrap; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Momin's Teaching Home</h1>
+  <p>Admin Panel</p>
+
+  <section id="login">
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <input id="email" type="email"
+        placeholder="Admin email" required>
+      <input id="password" type="password"
+        placeholder="Password" required>
+      <button id="loginButton" type="submit">Login</button>
+    </form>
+  </section>
+
+  <section id="panel">
+    <h2>Admin Dashboard</h2>
+    <p>লগইন সফল হয়েছে।</p>
+    <button id="logoutButton">Logout</button>
+    <hr>
+    <h2>নতুন নোটিশ</h2>
+    <form id="noticeForm">
+      <input id="noticeTitle" placeholder="নোটিশের শিরোনাম"
+        required maxlength="150">
+      <textarea id="noticeBody" placeholder="নোটিশের বিবরণ"
+        required maxlength="5000" rows="5"></textarea>
+      <button id="saveButton" type="submit">নোটিশ সেভ করো</button>
+    </form>
+  </section>
+
+  <section>
+    <p id="status" role="status">Firebase সংযোগ পরীক্ষা করা হচ্ছে...</p>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="./firebase-config.js"></script>
+
+<script>
+(() => {
+  const status = document.getElementById("status");
+  const login = document.getElementById("login");
+  const panel = document.getElementById("panel");
+  const loginForm = document.getElementById("loginForm");
+  const noticeForm = document.getElementById("noticeForm");
+
+  if (!window.firebaseConfig ||
+      !window.firebaseConfig.projectId) {
+    status.textContent =
+      "Config পাওয়া যায়নি। firebase-config.js পরীক্ষা করো।";
+    return;
+  }
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(window.firebaseConfig);
+  }
+
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  let allowedAdmin = false;
+
+  async function verifyAdmin(user) {
+    const ref = db.collection("admins").doc(user.uid);
+    const snap = await ref.get();
+
+    if (!snap.exists || snap.data().role !== "admin") {
+      throw new Error("এই অ্যাকাউন্টের Admin অনুমতি নেই।");
+    }
+  }
+
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = document.getElementById("loginButton");
+    button.disabled = true;
+    status.textContent = "লগইন করা হচ্ছে...";
+
+    try {
+      await auth.signInWithEmailAndPassword(
+        document.getElementById("email").value.trim(),
+        document.getElementById("password").value
+      );
+      // Admin access is checked by the auth-state listener.
+    } catch (error) {
+      status.textContent = "লগইন হয়নি: " + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  auth.onAuthStateChanged(async (user) => {
+    allowedAdmin = false;
+    panel.style.display = "none";
+    login.style.display = user ? "none" : "block";
+
+    if (!user) {
+      status.textContent = "Admin ইমেইল ও পাসওয়ার্ড দিয়ে লগইন করো।";
+      return;
+    }
+
+    try {
+      await verifyAdmin(user);
+      allowedAdmin = true;
+      login.style.display = "none";
+      panel.style.display = "block";
+      status.textContent = "Admin যাচাই সফল।";
+    } catch (error) {
+      status.textContent =
+        "Admin যাচাই হয়নি: " + error.message +
+        "\nFirestore Rules-এ নিজের admins ডকুমেন্ট পড়ার অনুমতি পরীক্ষা করো।";
+      await auth.signOut();
+    }
+  });
+
+  noticeForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!auth.currentUser || !allowedAdmin) {
+      status.textContent = "Admin অনুমতি পাওয়া যায়নি।";
+      return;
+    }
+
+    const button = document.getElementById("saveButton");
+    button.disabled = true;
+
+    try {
+      await db.collection("notices").add({
+        title: document.getElementById("noticeTitle").value.trim(),
+        body: document.getElementById("noticeBody").value.trim(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdBy: auth.currentUser.uid
+      });
+      noticeForm.reset();
+      status.textContent = "নোটিশ Firestore-এ সেভ হয়েছে।";
+    } catch (error) {
+      status.textContent = "নোটিশ সেভ হয়নি: " + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  document.getElementById("logoutButton").addEventListener(
+    "click", async () => {
+      await auth.signOut();
+    }
+  );
+})();
+</script>
+</body>
+</html>
+
 
